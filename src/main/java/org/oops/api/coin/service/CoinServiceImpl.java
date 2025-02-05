@@ -1,5 +1,6 @@
 package org.oops.api.coin.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.oops.api.coin.dto.CoinDTO;
@@ -25,6 +26,14 @@ public class CoinServiceImpl implements CoinService {
                 .stream()
                 .map(CoinDTO::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CoinDTO getCoinById(Long coinId){
+        return coinRepository.findById(coinId)
+                .map(coin -> new CoinDTO(coin.getCoinId(), coin.getName(), coin.getProspects(), coin.getPicture(), coin.getIsVisible(), coin.getTicker()))
+                .orElseThrow(() -> new EntityNotFoundException("해당 코인을 찾을 수 없습니다. ID: " + coinId));
     }
 
 }
