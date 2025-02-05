@@ -16,4 +16,11 @@ public interface CoinService {
      * @return 코인DTO 리스트 응답
      */
     List<CoinDTO> getVisibleCoins();
+
+    /**
+     * 한 코인의 정보를 보여줍니다.
+     *
+     * @return 코인DTO 응답
+     */
+    CoinDTO getCoinById(Long coinId);
 }
