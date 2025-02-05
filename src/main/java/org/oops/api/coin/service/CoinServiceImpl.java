@@ -23,7 +23,7 @@ public class CoinServiceImpl implements CoinService {
     public List<CoinDTO> getVisibleCoins(){
         return coinRepository.findByIsVisibleTrue()
                 .stream()
-                .map(CoinDTO::fromEnity)
+                .map(CoinDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
