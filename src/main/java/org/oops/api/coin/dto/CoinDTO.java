@@ -32,7 +32,7 @@ public class CoinDTO implements Serializable {
         this.ticker = ticker;
     }
 
-    public static CoinDTO fromEnity(Coin coin){
+    public static CoinDTO fromEntity(Coin coin){
         return CoinDTO.builder()
                 .coinId(coin.getCoinId())
                 .name(coin.getName())

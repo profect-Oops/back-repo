@@ -5,7 +5,7 @@ import org.oops.api.coin.dto.CoinDTO;
 import java.util.List;
 
 /**
- * CoinServiceImp는 코인과 관련된 다양한 기능을 제공합니다.
+ * CoinService는 코인과 관련된 다양한 기능을 제공합니다.
  *
  * @author: MJLee39
  */
