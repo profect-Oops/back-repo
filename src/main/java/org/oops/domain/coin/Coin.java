@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Getter
 @DynamicUpdate
 @NoArgsConstructor
+@Table(name = "COIN")
 public class Coin {
 
     @Id
