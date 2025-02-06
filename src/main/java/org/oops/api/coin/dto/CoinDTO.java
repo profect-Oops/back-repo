@@ -6,6 +6,7 @@ import org.oops.domain.coin.Coin;
 
 import javax.swing.text.html.parser.Entity;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Getter
 public class CoinDTO implements Serializable {
@@ -14,7 +15,7 @@ public class CoinDTO implements Serializable {
 
     private final String name;
 
-    private final Float prospects;
+    private final BigDecimal prospects;
 
     private final String picture;
 
@@ -23,7 +24,7 @@ public class CoinDTO implements Serializable {
     private final String ticker;
 
     @Builder
-    public CoinDTO(Long coinId, String name, Float prospects, String picture, Boolean isVisible, String ticker){
+    public CoinDTO(Long coinId, String name, BigDecimal prospects, String picture, Boolean isVisible, String ticker){
         this.coinId = coinId;
         this.name = name;
         this.prospects = prospects;

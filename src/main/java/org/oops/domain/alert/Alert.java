@@ -8,6 +8,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.oops.domain.coin.Coin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @DynamicUpdate
@@ -21,7 +23,7 @@ public class Alert {
     private Long alertId;
 
     @Column(name = "ALERT_PRICE")
-    private Double alertPrice;
+    private BigDecimal alertPrice;
 
     @Column(name = "ALERT_ACTIVE")
     private Boolean alertActive;
