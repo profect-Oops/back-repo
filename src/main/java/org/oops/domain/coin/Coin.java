@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @DynamicUpdate
@@ -23,7 +25,7 @@ public class Coin {
     private String name;
 
     @Column(name = "PROSPECTS")
-    private Float prospects;
+    private BigDecimal prospects;
 
     @Column(name = "COIN_PICTURE")
     private String picture;
@@ -36,7 +38,7 @@ public class Coin {
     private String ticker;
 
     @Builder
-    public Coin(String name, Float prospects, String picture, Boolean isVisible, String ticker) {
+    public Coin(String name, BigDecimal prospects, String picture, Boolean isVisible, String ticker) {
         this.name = name;
         this.prospects = prospects;
         this.picture = picture;
@@ -44,7 +46,7 @@ public class Coin {
         this.ticker = ticker;
     }
 
-    public static final Coin fromDTO(final String name, final Float prospects, final String picture, final Boolean isVisible, final String ticker) {
+    public static final Coin fromDTO(final String name, final BigDecimal prospects, final String picture, final Boolean isVisible, final String ticker) {
         return Coin.builder()
                 .name(name)
                 .prospects(prospects)

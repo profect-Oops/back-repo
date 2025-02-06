@@ -46,6 +46,8 @@ out/
 ### DEV ###
 application.yml
 src/test/resources/application.yml
+application-oauth.yml
+src/test/resources/application-oauth.yml
 
 # q type이 들어있는 generated는 무시
 /src/main/generated/
