@@ -6,12 +6,12 @@
     <title>홈</title>
 </head>
 <body>
-<h1>Welcome to the Home Page</h1>
+<h1>환영합니다</h1>
 <div th:if="${email != null}">
     <p>안녕하세요, <span th:text="${email}"></span></p>
 </div>
 <div th:if="${email == null}">
-    <p>Please log in</p>
+    <p>로그인 해주세요</p>
 </div>
 </body>
 </html>

@@ -17,6 +17,7 @@ public class LoginController {
     @GetMapping("/")
     public String index(Model model) {
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        System.out.println("컨트롤러 세션 확인: " + (user != null ? user.getEmail() : "세션 없음"));
         if (user != null) {
             model.addAttribute("email", user.getEmail());
         }
