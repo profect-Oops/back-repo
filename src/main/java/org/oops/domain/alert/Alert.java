@@ -1,12 +1,13 @@
 package org.oops.domain.alert;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 import org.oops.domain.coin.Coin;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.oops.domain.user.User;
 
 import java.math.BigDecimal;
 
@@ -25,12 +26,41 @@ public class Alert {
     @Column(name = "ALERT_PRICE")
     private BigDecimal alertPrice;
 
-    @Column(name = "ALERT_ACTIVE")
+    @Column(name = "ALERT_ACTIVE", nullable = false)
+    @ColumnDefault("true")
     private Boolean alertActive;
 
     @ManyToOne
     @JoinColumn(name = "COIN_ID")
-    private Coin coinId;
+    private Coin coin;
 
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User userId;
+
+    @Builder
+    public Alert(BigDecimal alertPrice, Boolean alertActive, Coin coin, User userId) {
+        this.alertPrice = alertPrice;
+        this.alertActive = alertActive;
+        this.coin = coin;
+        this.userId = userId;
+    }
+
+    public static final Alert fromDTO(final BigDecimal alertPrice, final Boolean alertActive, final Coin coin, final User userId) {
+        return Alert.builder()
+                .alertPrice(alertPrice)
+                .alertActive(alertActive)
+                .coin(coin)
+                .userId(userId)
+                .build();
+    }
+
+    public void updateAlertActive(Boolean alertActive) {
+        this.alertActive = alertActive;
+    }
+
+    public void updateAlertPrice(BigDecimal alertPrice) {
+        this.alertPrice = alertPrice;
+    }
 }
 

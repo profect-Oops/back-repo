@@ -29,8 +29,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers().hasRole(Role.USER.name())
-                        .requestMatchers("/", "/login", "/css/**", "images/**", "/static/js/**", "/logout/*", "/api/coin/**").permitAll()  //인증없어도 접근 가능
-                        .requestMatchers("/api/news/**").authenticated()  //인증해야만 접속 가능
+                        .requestMatchers("/", "/login", "/css/**", "images/**", "/static/js/**", "/logout/*", "/api/coin/**", "/api/news/**").permitAll()  //인증없어도 접근 가능
+                        .requestMatchers("/api/alert/**").authenticated()  //인증해야만 접속 가능
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션 유지

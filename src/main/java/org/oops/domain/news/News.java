@@ -30,9 +30,6 @@ public class News {
     @Column(name = "NEWSPAPER")
     private String newspaper;
 
-    @Column(name = "WRITER")
-    private String writer;
-
     @Column(name = "SOURCE")
     private String source;
 
@@ -47,23 +44,21 @@ public class News {
     private Coin coinId;
 
     @Builder
-    public News(String title, String content, String newspaper, String writer, String source, LocalDateTime uploadTime, String newsImage, Coin coinId) {
+    public News(String title, String content, String newspaper, String source, LocalDateTime uploadTime, String newsImage, Coin coinId) {
         this.title = title;
         this.content = content;
         this.newspaper = newspaper;
-        this.writer = writer;
         this.source = source;
         this.uploadTime = uploadTime;
         this.newsImage = newsImage;
         this.coinId = coinId;
     }
 
-    public static final News fromDTO(final String title, final String content, final String newspaper, final String writer, final String source, final LocalDateTime uploadTime, final String newsImage, final Coin coinId) {
+    public static final News fromDTO(final String title, final String content, final String newspaper, final String source, final LocalDateTime uploadTime, final String newsImage, final Coin coinId) {
         return News.builder()
                 .title(title)
                 .content(content)
                 .newspaper(newspaper)
-                .writer(writer)
                 .source(source)
                 .uploadTime(uploadTime)
                 .newsImage(newsImage)

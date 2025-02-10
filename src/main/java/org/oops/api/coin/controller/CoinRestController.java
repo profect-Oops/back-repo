@@ -30,4 +30,5 @@ public class CoinRestController extends BaseController {
         return ResponseDTO.ok(coinService.getCoinById(coinId));
     }
 
+
 }

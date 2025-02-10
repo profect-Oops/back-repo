@@ -1,6 +1,7 @@
 package org.oops.api.coin.service;
 
 import org.oops.api.coin.dto.CoinDTO;
+import org.oops.api.coin.dto.CoinFindByNameDTO;
 
 import java.util.List;
 
@@ -23,4 +24,11 @@ public interface CoinService {
      * @return 코인DTO 응답
      */
     CoinDTO getCoinById(Long coinId);
+
+    /**
+     * 코인 이름으로 코인 찾기
+     *
+     * @return 코인DTO
+     */
+    CoinFindByNameDTO findCoinByCoinName(String coinName);
 }
