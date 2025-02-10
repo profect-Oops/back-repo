@@ -41,6 +41,7 @@ public class CoinServiceImpl implements CoinService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 코인을 찾을 수 없습니다. ID: " + coinId));
     }
 
+    //코인 이름으로 코인 조회
     @Override
     @Transactional(readOnly = true)
     public CoinFindByNameDTO findCoinByCoinName(String coinName){

@@ -32,6 +32,19 @@ public class CoinRestController extends BaseController {
         return ResponseDTO.ok(coinService.getCoinById(coinId));
     }
 
+    //코인 이름으로 조회
+    @GetMapping("/details/{name}")
+    public ResponseEntity<?> getCoinDetails(@PathVariable String name) {
+        // 코인 정보를 name으로 조회
+        CoinFindByNameDTO coin = coinService.findCoinByCoinName(name);
+
+        if (coin == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("코인을 찾을 수 없습니다.");
+        }
+
+        return ResponseEntity.ok(coin);
+    }
+
     //코인 추가
     @PostMapping("/add")
     public List<CreateCoinDTO> addCoinsToServer(@RequestBody List<CreateCoinDTO> coinInfoArray) {
