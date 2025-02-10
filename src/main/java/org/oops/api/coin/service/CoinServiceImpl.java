@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.oops.api.coin.dto.CoinDTO;
+import org.oops.api.coin.dto.CoinFindByNameDTO;
 import org.oops.domain.coin.CoinRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,4 +37,11 @@ public class CoinServiceImpl implements CoinService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 코인을 찾을 수 없습니다. ID: " + coinId));
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public CoinFindByNameDTO findCoinByCoinName(String coinName){
+        return coinRepository.findByName(coinName)
+                .map(coin -> new CoinFindByNameDTO(coin.getCoinId(), coin.getName()))
+                .orElseThrow(() -> new EntityNotFoundException("해당 코인을 찾을 수 없습니다. coinName: " + coinName));
+    }
 }

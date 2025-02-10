@@ -33,4 +33,8 @@ public class ResponseDTO<T> {
         this.result = new ResultObject(ex);
     }
 
+    // 에러 응답 처리 (ResultObject를 통해 에러 메시지 관리)
+    public static <T> ResponseDTO<T> error(String message) {
+        return new ResponseDTO<>(ResultObject.getFailure(message));
+    }
 }

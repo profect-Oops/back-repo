@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 10 Coins</title>
+    <script defer src="js/demo/script.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* 'Top 10' 제목 스타일 */
+        .cards-title {
+            color: #4e73df;
+            font-weight: 800;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        /* 테이블을 감싸는 컨테이너 스타일 */
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 테이블 스타일 */
+        #coin-table {
+            margin-top: 20px;
+            width: 80%;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        #coin-table th, #coin-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #coin-table td:nth-child(2) {
+            min-width: 150px;
+        }
+
+        #coin-table th {
+            background-color: #4e73df;
+            color: white;
+        }
+
+        #coin-table img {
+            max-width: 50px;
+            height: auto;
+        }
+
+        /* 배지 스타일 */
+        .badge {
+            padding: 0.5em 0.75em;
+            font-size: 0.875em;
+            font-weight: 700;
+            border-radius: 0.35rem;
+        }
+
+        .badge-primary { color: #fff; background-color: #4e73df; }
+        .badge-secondary { color: #fff; background-color: #858796; }
+        .badge-success { color: #fff; background-color: #1cc88a; }
+        .badge-danger { color: #fff; background-color: #e74a3b; }
+        .badge-warning { color: #fff; background-color: #f6c23e; }
+        .badge-info { color: #fff; background-color: #36b9cc; }
+        .badge-light { color: #3a3b45; background-color: #f8f9fc; }
+        .badge-dark { color: #fff; background-color: #5a5c69; }
+
+        /* 네비게이션 바 */
+        .navbar {
+            background-color: #4e73df !important;
+            padding: 1rem;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .navbar a:hover {
+            color: #dfe6ff;
+        }
+
+        .sidebar-brand {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .img-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body id="page-top">
+<!-- 네비게이션 바 -->
+<nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-text mx-3">Coinfo</div>
+    </a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link" href="list.html">
+                <i class="fas fa-bell fa-fw"></i>
+                <span class="badge badge-danger">1+</span>
+            </a>
+        </li>
+        <div class="topbar-divider d-none d-sm-block"></div>
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">[1팀]Oops!</span>
+                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<!-- 코인 테이블 섹션 -->
+<div class="cards-container">
+    <h2 class="cards-title">Top 10</h2>
+    <table id="coin-table">
+        <thead>
+        <tr>
+            <th>로고</th>
+            <th>이름</th>
+            <th>티커</th>
+            <th>현재가</th>
+            <th>전일 대비</th>
+            <th>거래액</th>
+        </tr>
+        </thead>
+        <tbody id="coin-table-body">
+        <!-- 코인 데이터가 여기에 추가됩니다 -->
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
