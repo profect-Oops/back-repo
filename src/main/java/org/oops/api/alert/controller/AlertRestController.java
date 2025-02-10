@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -67,11 +68,20 @@ public class AlertRestController extends BaseController {
         return ResponseDTO.ok(alertService.getAlertByUserId(principal.getId()));
     }
 
-    //알림 수정 -> 부분 업데이트: PATCH
-    @PatchMapping(value = "/update")
-    public ResponseDTO<UpdateAlertDTO.UpdateAlertResponseDTO> updateAlert(@RequestBody UpdateAlertDTO.UpdateAlertRequestDTO requestDTO){
-        return ResponseDTO.ok(alertService.updateAlert(requestDTO));
+    // 알림 수정 -> 부분 업데이트: PATCH
+    @PatchMapping("/update/{alertId}")
+    public ResponseEntity<ResponseDTO<Void>> updateAlertStatus(
+            @PathVariable Long alertId,
+            @RequestBody Map<String, Boolean> requestBody) {
+
+        Boolean alertActive = requestBody.get("alertActive");
+
+        // 알림 상태 업데이트 서비스 호출
+        alertService.updateAlertStatus(alertId, alertActive);
+
+        return ResponseEntity.ok(ResponseDTO.ok(null));
     }
+
 
     //알림 삭제
     @DeleteMapping(value = "/delete/{alertId}")
