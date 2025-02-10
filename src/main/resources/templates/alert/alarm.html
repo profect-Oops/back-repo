@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Coinfo</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- 추가할 커스텀 CSS -->
+    <link href="css/custom.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow"
+                 style="background-color: #4e73df !important;">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <!-- Sidebar - Brand -->
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html"
+                   style="height: 4.375rem; text-decoration: none; font-size: 1rem; font-weight: 800;
+                    padding: 1.5rem 1rem; text-align: center; text-transform: uppercase;
+                    letter-spacing: 0.05rem; font-family: 'Nunito', sans-serif; color: #ffffff;">
+                    <div class="sidebar-brand-text mx-3"
+                         style="font-size: 1rem; font-weight: 800; color: #ffffff;">
+                        Coinfo
+                    </div>
+                </a>
+
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+
+
+                    <!-- Nav Item - Alerts -->
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <a class="nav-link" href="alarm.html" id="alertsDropdown">
+                            <i class="fas fa-bell fa-fw" style="color: #ffffff !important;"></i>
+                            <!-- Counter - Alerts -->
+                            <span class="badge badge-danger badge-counter">1+</span>
+                        </a>
+                    </li>
+
+
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" style="color: #ffffff !important;">[1팀]Oops!</span>
+                            <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                        </a>
+
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="logout.html">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Content Row -->
+                <div class="row">
+
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-4 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            총 알람 개수(Total)</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">10개</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-list-alt fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 알람 ON 카드 -->
+                    <div class="col-xl-4 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            알람 ON
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">4개</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-bell fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 알람 OFF 카드 -->
+                    <div class="col-xl-4 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            알람 OFF
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">6개</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-bell-slash fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- Content Row -->
+                <div class="row">
+
+                    <!-- Content Column -->
+                    <div class="col-lg-12 mb-12">
+
+                        <!-- Project Card Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-4 d-flex flex-wrap align-items-center justify-content-between"
+                                 style="background-color: #4e73df !important; color: white !important;">
+
+                                <!-- 왼쪽: 알림 설정 (고정) -->
+                                <div class="col-md-2 col-12 text-left">
+                                    <h6 class="m-0 font-weight-bold" style="color: white !important;">알림 설정</h6>
+                                </div>
+
+                                <!-- 오른쪽: 검색창 그룹 + 설정 버튼 -->
+                                <div class="col-md-10 col-12 d-flex justify-content-end align-items-center flex-wrap">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mb-0 mr-2" style="white-space: nowrap; min-width: 50px; color: white !important;">종목:</label>
+                                        <input type="text" id="coinInput" class="form-control mr-3" placeholder="코인명을 입력하세요"
+                                               style="height: 38px; max-width: 200px;">
+                                    </div>
+
+                                    <div class="d-flex align-items-center">
+                                        <label class="mb-0 mr-2" style="white-space: nowrap; min-width: 50px; color: white !important;">가격:</label>
+                                        <input type="text" id="alertPrice" class="form-control mr-3" placeholder="알림 가격을 입력하세요"
+                                               style="height: 38px; max-width: 200px;">
+                                    </div>
+
+                                    <!-- 설정 버튼 -->
+                                    <button id="saveAlertButton" class="btn btn-light mr-3" style="height: 38px; width: auto; min-width: 100px;">설정</button>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Content Row -->
+
+                <div class="row">
+
+                    <!-- 코인 알람 목록 -->
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                            <!-- 카드 헤더 -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">코인 알람 목록</h6>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                         aria-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">설정 옵션</div>
+                                        <a class="dropdown-item" href="#">알람 추가</a>
+                                        <a class="dropdown-item" href="#">알람 관리</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">전체 알람 끄기</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 카드 바디 -->
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                        <tr>
+                                            <th>코인 이름</th>
+                                            <th>알림 설정 가격</th>
+                                            <th>알림 설정</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="alertTableBody">
+                                        <!-- 데이터가 여기에 동적으로 삽입됩니다 -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- 토글 스위치 스타일 -->
+                    <style>
+                        .switch {
+                            position: relative;
+                            display: inline-block;
+                            width: 34px;
+                            height: 20px;
+                        }
+
+                        .switch input {
+                            opacity: 0;
+                            width: 0;
+                            height: 0;
+                        }
+
+                        .slider {
+                            position: absolute;
+                            cursor: pointer;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background-color: #ccc;
+                            transition: .4s;
+                            border-radius: 34px;
+                        }
+
+                        .slider:before {
+                            position: absolute;
+                            content: "";
+                            height: 14px;
+                            width: 14px;
+                            left: 3px;
+                            bottom: 3px;
+                            background-color: white;
+                            transition: .4s;
+                            border-radius: 50%;
+                        }
+
+                        input:checked + .slider {
+                            background-color: #4e73df;
+                        }
+
+                        input:checked + .slider:before {
+                            transform: translateX(14px);
+                        }
+                    </style>
+
+
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Your Website 2021</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="login.html">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 페이지가 로드될 때 알림 데이터를 조회
+    window.addEventListener("DOMContentLoaded", async function() {
+        try {
+            const response = await fetch("/api/alert/read", { // 알림 리스트를 가져오는 API 호출
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include" // 세션 유지를 위한 옵션
+            });
+
+            const data = await response.json();
+
+            if (data.result.code === "0000") {
+                populateTable(data.data); // 데이터를 테이블에 동적으로 삽입
+            } else {
+                alert("알림을 불러오는 데 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("알림 데이터를 불러오는 중 오류 발생:", error);
+            alert("알림 데이터를 불러오는 중 오류가 발생했습니다.");
+        }
+    });
+
+    // 테이블에 알림 데이터 삽입
+    function populateTable(alerts) {
+        const tableBody = document.getElementById("alertTableBody");
+
+        // 테이블 초기화
+        tableBody.innerHTML = "";
+        console.log("API 응답 데이터:", alerts);
+
+        alerts.forEach(alert => {
+            const row = document.createElement("tr");
+            console.log("coin리스트: "+alert);
+            const coinNameCell = document.createElement("td");
+            coinNameCell.textContent = `$${alert.coin.coinName}`;  // 코인 이름
+
+            const alertPriceCell = document.createElement("td");
+            alertPriceCell.textContent = `$${alert.alertPrice}`;  // 알림 가격
+
+            const alertActiveCell = document.createElement("td");
+            const switchLabel = document.createElement("label");
+            switchLabel.classList.add("switch");
+
+            const switchInput = document.createElement("input");
+            switchInput.type = "checkbox";
+            switchInput.checked = alert.alertActive; // alertActive 값에 따라 체크박스 상태 설정
+            switchInput.setAttribute("data-alert-id", alert.alertId); // 해당 alertId를 저장
+
+            const switchSpan = document.createElement("span");
+            switchSpan.classList.add("slider", "round");
+
+            switchLabel.appendChild(switchInput);
+            switchLabel.appendChild(switchSpan);
+
+            alertActiveCell.appendChild(switchLabel);
+
+            // 테이블에 행 추가
+            row.appendChild(coinNameCell);
+            row.appendChild(alertPriceCell);
+            row.appendChild(alertActiveCell);
+
+            tableBody.appendChild(row);
+
+            // 슬라이더의 상태 변경 이벤트 처리
+            switchInput.addEventListener("change", async function() {
+                const alertId = switchInput.getAttribute("data-alert-id");
+                const alertActive = switchInput.checked;
+
+                try {
+                    const response = await fetch(`/api/alert/update/${alertId}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ alertActive: alertActive })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        alert("알림 상태가 변경되었습니다!");
+                    } else {
+                        alert("알림 상태 변경에 실패했습니다.");
+                    }
+                } catch (error) {
+                    console.error("알림 상태 변경 오류:", error);
+                    alert("알림 상태 변경 중 오류가 발생했습니다.");
+                }
+            });
+        });
+    }
+
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "pageLength": 5,
+            "lengthMenu": [5, 10],
+            "language": {
+                "info": "_START_-_END_개 표시",
+                "infoEmpty": "데이터 없음"
+            }
+        });
+    });
+</script>
+<script>
+    document.getElementById("saveAlertButton").addEventListener("click", async function() {
+        const coinName = document.getElementById("coinInput").value; // 사용자가 입력한 종목 값
+
+        if (!coinName) {
+            alert("코인명을 입력해주세요.");
+            return;
+        }
+
+        try {
+
+
+            // 알림 정보 생성
+            const alertRequest = {
+                coinName: coinName,
+                alertPrice: parseFloat(document.getElementById("alertPrice").value), // 알림 가격 입력
+                alertActive: true // 알림 활성화 여부
+            };
+
+            // 알림 저장 요청
+            const saveResponse = await fetch("/api/alert/save", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(alertRequest),
+                credentials: "include" // 세션 유지를 위한 옵션
+            });
+
+            const saveResult = await saveResponse.json();
+
+            console.log("브라우저 Response Status:", saveResponse.status);
+            console.log("브라우저 Response OK:", saveResponse.ok);
+            console.log("브라우저 Response Data:", saveResult);
+
+
+            if (saveResult.result.code === "0000") {
+                alert("알림이 성공적으로 저장되었습니다!");
+            } else {
+                alert("알림 저장에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("해당 코인을 찾을 수 없습니다.");
+        }
+    });
+
+</script>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="js/demo/chart-area-demo.js"></script>
+<script src="js/demo/chart-pie-demo.js"></script>
+
+<!-- Page level plugins -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="js/demo/datatables-demo.js"></script>
+
+</body>
+
+</html>

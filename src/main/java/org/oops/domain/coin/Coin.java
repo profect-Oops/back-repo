@@ -31,7 +31,7 @@ public class Coin {
     private String picture;
 
     @Column(name = "ISVisible", nullable = false)
-    @ColumnDefault("false")
+    @ColumnDefault("true")
     private Boolean isVisible;
 
     @Column(name = "TICKER")
@@ -43,6 +43,13 @@ public class Coin {
         this.prospects = prospects;
         this.picture = picture;
         this.isVisible = isVisible;
+        this.ticker = ticker;
+    }
+
+    @Builder
+    public Coin(String name, String picture, String ticker) {
+        this.name = name;
+        this.picture = picture;
         this.ticker = ticker;
     }
 

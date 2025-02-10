@@ -26,5 +26,8 @@ public class ResultObject {
     public static ResultObject getSuccess() {
         return new ResultObject(ResultType.SUCCESS);
     }
+    public static ResultObject getFailure(String message){
+        return new ResultObject(ResultType.SYSTEM_ERROR);
+    }
 
 }
