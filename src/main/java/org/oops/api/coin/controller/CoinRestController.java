@@ -3,14 +3,16 @@ package org.oops.api.coin.controller;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.oops.api.coin.dto.CoinDTO;
+import org.oops.api.coin.dto.CoinFindByNameDTO;
+import org.oops.api.coin.dto.CreateCoinDTO;
 import org.oops.api.coin.service.CoinService;
 import org.oops.api.common.controller.BaseController;
 import org.oops.api.common.dto.ResponseDTO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -30,5 +32,10 @@ public class CoinRestController extends BaseController {
         return ResponseDTO.ok(coinService.getCoinById(coinId));
     }
 
+    //코인 추가
+    @PostMapping("/add")
+    public List<CreateCoinDTO> addCoinsToServer(@RequestBody List<CreateCoinDTO> coinInfoArray) {
+        return coinService.addCoinsToDatabase(coinInfoArray); // 코인 정보를 DB에 추가
+    }
 
 }

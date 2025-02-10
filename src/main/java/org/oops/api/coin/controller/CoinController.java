@@ -32,6 +32,6 @@ public class CoinController extends BaseController {
     public String getCoin(@PathVariable Long coinId, Model model) {
         CoinDTO coin = coinService.getCoinById(coinId);
         model.addAttribute("coin", coin);
-        return "coin/detail";  // 뷰 파일 (예: coin/detail.html) 로 이동
+        return "coin/detail";
     }
 }

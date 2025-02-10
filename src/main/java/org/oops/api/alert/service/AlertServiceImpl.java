@@ -90,6 +90,24 @@ public class AlertServiceImpl implements AlertService {
         return UpdateAlertDTO.UpdateAlertResponseDTO.fromEntity(alert);
     }
 
+    //알림 활성화 여부 수정
+    @Override
+    @Transactional
+    public void updateAlertStatus(Long alertId, Boolean alertActive){
+        // 알림 ID로 해당 알림 조회
+        Alert alert = alertRepository.findById(alertId).orElse(null);
+
+        if (alert == null) {
+            throw new IllegalArgumentException("알림을 찾을 수 없습니다.");
+        }
+
+        // alertActive 값 변경
+        alert.updateAlertActive(alertActive);
+
+        // 알림 상태 업데이트
+        alertRepository.save(alert);
+    }
+
     //알림 삭제
     @Override
     @Transactional

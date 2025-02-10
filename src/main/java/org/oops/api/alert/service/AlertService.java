@@ -50,6 +50,14 @@ public interface AlertService {
     UpdateAlertDTO.UpdateAlertResponseDTO updateAlert(UpdateAlertDTO.UpdateAlertRequestDTO request);
 
     /**
+     * 알림 활성화 여부 업데이트
+     *
+     * @param알림 ID, 알림 활성화 여부
+     *
+     */
+    void updateAlertStatus(Long alertId, Boolean alertActive);
+
+    /**
      * 주어진 ID로 알림을 삭제합니다.
      *
      * @param삭제할 리뷰의 ID
