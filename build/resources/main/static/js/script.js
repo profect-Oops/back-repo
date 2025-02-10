@@ -77,7 +77,7 @@ function updateTable(coins) {
         // 클릭 시 상세 페이지로 이동
         row.style.cursor = "pointer"; // 마우스 오버 시 손가락 모양
         row.addEventListener('click', () => {
-            window.location.href = `/read/${coinInfo.ticker}`; // BTC -> /read/BTC
+            window.location.href = `/coin/coinDetail.html?name=${encodeURIComponent(coinInfo.name)}`;
         });
         tableBody.appendChild(row);
     });
