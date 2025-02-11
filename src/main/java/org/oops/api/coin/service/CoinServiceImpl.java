@@ -8,8 +8,10 @@ import org.oops.api.coin.dto.CoinFindByNameDTO;
 import org.oops.api.coin.dto.CreateCoinDTO;
 import org.oops.domain.coin.Coin;
 import org.oops.domain.coin.CoinRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,7 @@ public class CoinServiceImpl implements CoinService {
     public CoinFindByNameDTO findCoinByCoinName(String coinName){
         return coinRepository.findByName(coinName)
                 .map(coin -> new CoinFindByNameDTO(coin.getCoinId(), coin.getName()))
-                .orElseThrow(() -> new EntityNotFoundException("해당 코인을 찾을 수 없습니다. coinName: " + coinName));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 코인을 찾을 수 없습니다. coinName: " + coinName));
     }
 
     // 코인 추가

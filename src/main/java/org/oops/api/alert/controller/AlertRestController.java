@@ -16,6 +16,7 @@ import org.oops.global.config.auth.dto.SessionUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +69,7 @@ public class AlertRestController extends BaseController {
         return ResponseDTO.ok(alertService.getAlertByUserId(principal.getId()));
     }
 
-    // 알림 수정 -> 부분 업데이트: PATCH
+    // 알림 활성화 여부 수정 -> 부분 업데이트: PATCH
     @PatchMapping("/update/{alertId}")
     public ResponseEntity<ResponseDTO<Void>> updateAlertStatus(
             @PathVariable Long alertId,
@@ -78,6 +79,20 @@ public class AlertRestController extends BaseController {
 
         // 알림 상태 업데이트 서비스 호출
         alertService.updateAlertStatus(alertId, alertActive);
+
+        return ResponseEntity.ok(ResponseDTO.ok(null));
+    }
+
+    // 알림 가격 수정 -> 부분 업데이트: PATCH
+    @PatchMapping("/update/price/{alertId}")
+    public ResponseEntity<ResponseDTO<Void>> updateAlertPrice(
+            @PathVariable Long alertId,
+            @RequestBody Map<String, BigDecimal> requestBody) {
+
+        BigDecimal alertPrice = requestBody.get("alertPrice");
+
+        // 알림 상태 업데이트 서비스 호출
+        alertService.updateAlertPrice(alertId, alertPrice);
 
         return ResponseEntity.ok(ResponseDTO.ok(null));
     }
