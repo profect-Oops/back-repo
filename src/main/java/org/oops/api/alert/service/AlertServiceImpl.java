@@ -15,6 +15,7 @@ import org.oops.domain.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -70,26 +71,6 @@ public class AlertServiceImpl implements AlertService {
         return GetAlertResponseDTO.fromEntity(alert);
     }
 
-
-    //알림 수정
-    @Override
-    @Transactional
-    public UpdateAlertDTO.UpdateAlertResponseDTO updateAlert(UpdateAlertDTO.UpdateAlertRequestDTO request){
-        Alert alert = alertRepository.findById(request.getAlertId()).orElseThrow(
-                () -> new EntityNotFoundException("해당하는 알림이 없습니다.")
-        );
-
-        if(request.getAlertActive() != null){
-            alert.updateAlertActive(request.getAlertActive());
-        }
-
-        if(request.getAlertPrice() != null){
-            alert.updateAlertPrice(request.getAlertPrice());
-        }
-
-        return UpdateAlertDTO.UpdateAlertResponseDTO.fromEntity(alert);
-    }
-
     //알림 활성화 여부 수정
     @Override
     @Transactional
@@ -107,6 +88,25 @@ public class AlertServiceImpl implements AlertService {
         // 알림 상태 업데이트
         alertRepository.save(alert);
     }
+
+    //알림 가격 수정
+    @Override
+    @Transactional
+    public void updateAlertPrice(Long alertId, BigDecimal alertPrice){
+        // 알림 ID로 해당 알림 조회
+        Alert alert = alertRepository.findById(alertId).orElse(null);
+
+        if (alert == null) {
+            throw new IllegalArgumentException("알림을 찾을 수 없습니다.");
+        }
+
+        // alertPrice 값 수정
+        alert.updateAlertPrice(alertPrice);
+
+        // 알림 상태 업데이트
+        alertRepository.save(alert);
+    }
+
 
     //알림 삭제
     @Override

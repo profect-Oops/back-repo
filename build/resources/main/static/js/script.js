@@ -38,6 +38,11 @@ async function fetchTopCoins() {
         const tickerResponse = await fetch(API_URL + tickers);
         const tickerData = await tickerResponse.json();
 
+        // 거래량 기준으로 정렬하여 상위 10개 선택
+        const topCoins = tickerData
+            .sort((a, b) => b.acc_trade_price_24h - a.acc_trade_price_24h) // 거래량 내림차순 정렬
+            .slice(0, 10); // 상위 10개 선택
+
         // 서버에 상위 10개 코인 정보 추가 요청
         await addCoinsToServer(tickerData);  // 이 부분 추가
 
