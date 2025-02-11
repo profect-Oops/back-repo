@@ -4,6 +4,7 @@ import org.oops.api.alert.dto.CreateAlertDTO;
 import org.oops.api.alert.dto.GetAlertResponseDTO;
 import org.oops.api.alert.dto.UpdateAlertDTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -41,21 +42,19 @@ public interface AlertService {
     GetAlertResponseDTO getAlertByAlertId(Long alertId);
 
     /**
-     * 주어진 요청 DTO를 기반으로 알림 세부 정보를 업데이트합니다.
-     *
-     * @param알림을 업데이트 하기 위해 필요한 정보 포함
-     *
-     * @return 업데이트 된 알림의 세부 정보를 포함한 응답
-     */
-    UpdateAlertDTO.UpdateAlertResponseDTO updateAlert(UpdateAlertDTO.UpdateAlertRequestDTO request);
-
-    /**
      * 알림 활성화 여부 업데이트
      *
      * @param알림 ID, 알림 활성화 여부
      *
      */
     void updateAlertStatus(Long alertId, Boolean alertActive);
+
+    /**
+     * 알림 수정 - alertPrice 수정
+     *
+     * @param알림 ID, price
+     */
+    void updateAlertPrice(Long alertId, BigDecimal alertPrice);
 
     /**
      * 주어진 ID로 알림을 삭제합니다.
