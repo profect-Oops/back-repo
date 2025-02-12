@@ -2,11 +2,16 @@ let candleData = [];
 let chart;
 let candleSeries;
 let socket;
-const market = "KRW-BTC";
 let isLoading = false;
 let tempCandle = null;
 let lastCandleTimestamp = 0;
 const priceElement = document.getElementById("current-price");
+
+// script 태그에서 data-ticker 값 가져오기
+const scriptTag = document.querySelector('script[src*="upbit_websocket.js"]');
+const market = scriptTag && scriptTag.dataset.ticker ? `KRW-${scriptTag.dataset.ticker}` : "KRW-BTC"; // 기본값: KRW-BTC
+console.log(`market: ${market}`);
+
 // ✅ Lightweight 차트 초기화
 function initializeLightweightChart() {
     const chartContainer = document.getElementById("tradingview-chart");

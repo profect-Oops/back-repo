@@ -33,8 +33,8 @@ public class UserRestController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<String> getUserEmail(HttpSession session) {
-        String email = (String) session.getAttribute("email");
-        return ResponseEntity.ok(email);
+    public String getUserEmail(HttpSession session) {
+        Object email = session.getAttribute("email");
+        return email != null ? email.toString() : "";
     }
 }

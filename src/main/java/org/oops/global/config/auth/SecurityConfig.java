@@ -32,7 +32,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers().hasRole(Role.USER.name())
-                        .requestMatchers("/", "/login","/login.html", "/css/**", "images/**", "/static/js/**", "/logout/*", "/api/coin/**", "/api/news/**").permitAll()  //인증없어도 접근 가능
+                        .requestMatchers("/", "/login","/login.html", "/css/**", "images/**", "/static/js/**", "/js/**", "/logout/*", "/api/coin/**", "/api/news/**", "/coin/list.html", "/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
                         .requestMatchers("/api/alert/**").authenticated()  //인증해야만 접속 가능
                         .anyRequest().authenticated()
                 )
@@ -43,7 +43,7 @@ public class SecurityConfig {
                 // OAuth2 로그인 기능에 대한 여러 설정
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/coin/list.html", false)  // false로 하면 기존 요청을 유지하면서 리다이렉트하지 않아서 세션 유지됨
+                        .defaultSuccessUrl("/alert/alarm.html", false)  // false로 하면 기존 요청을 유지하면서 리다이렉트하지 않아서 세션 유지됨
                         .failureHandler((request, response, exception) -> {
                             log.error("로그인 실패! 이유: {}", exception.getMessage());
                             response.sendRedirect("/coin/list.html");
@@ -59,7 +59,7 @@ public class SecurityConfig {
                             request.getSession().setAttribute("email", email);
 
                             // /coin/list.html 페이지로 리다이렉트
-                            response.sendRedirect("/coin/list.html");
+                            response.sendRedirect("/alert/alarm.html");
                         })
                 );
         return http.build();

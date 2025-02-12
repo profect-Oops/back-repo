@@ -29,9 +29,14 @@ public interface CoinService {
     /**
      * 코인 이름으로 코인 찾기
      *
-     * @return 코인DTO
+     * @return CoinFindByNameDTO
      */
-    CoinFindByNameDTO findCoinByCoinName(String coinName);
+    CoinFindByNameDTO findCoinIdByCoinName(String coinName);
+
+    /**
+     * 코인 이름으로 코인 찾아서 coinDTO 반환
+     */
+    CoinDTO findCoinByCoinName(String coinName);
 
     /**
      * name이 존재하는지 확인하고 없으면 코인을 Insert 하는 로직

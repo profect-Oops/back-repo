@@ -121,6 +121,18 @@ public class AlertServiceImpl implements AlertService {
         }
     }
 
+    //내 알림의 총 개수 조회
+    @Override
+    @Transactional(readOnly = true)
+    public int getTotalAlertCount(Long userId){
+        return alertRepository.countByUserId_UserId(userId);
+    }
 
+    //내 알림 중 알림 활성화 된 알림 개수 조회
+    @Override
+    @Transactional(readOnly = true)
+    public int getActiveAlertCount(Long userId){
+        return alertRepository.countByUserId_UserIdAndAlertActiveTrue(userId);
+    }
 
 }
