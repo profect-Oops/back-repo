@@ -69,6 +69,21 @@ public class AlertRestController extends BaseController {
         return ResponseDTO.ok(alertService.getAlertByUserId(principal.getId()));
     }
 
+    //내 알림 개수 조회
+    @GetMapping(value = "count")
+    public Map<String, Integer> countAlert(HttpSession session){
+        SessionUser user = (SessionUser) session.getAttribute("user");
+        int totalAlerts = alertService.getTotalAlertCount(user.getId());
+        int activeAlerts = alertService.getActiveAlertCount(user.getId());
+        int inactiveAlerts = totalAlerts - activeAlerts;
+
+        return Map.of(
+                "total", totalAlerts,
+                "on", activeAlerts,
+                "off", inactiveAlerts
+        );
+    }
+
     // 알림 활성화 여부 수정 -> 부분 업데이트: PATCH
     @PatchMapping("/update/{alertId}")
     public ResponseEntity<ResponseDTO<Void>> updateAlertStatus(

@@ -37,13 +37,17 @@ public class Coin {
     @Column(name = "TICKER")
     private String ticker;
 
+    @Column(name = "GPT_DATA")
+    private String gptData;
+
     @Builder
-    public Coin(String name, BigDecimal prospects, String picture, Boolean isVisible, String ticker) {
+    public Coin(String name, BigDecimal prospects, String picture, Boolean isVisible, String ticker, String gptData) {
         this.name = name;
         this.prospects = prospects;
         this.picture = picture;
         this.isVisible = isVisible;
         this.ticker = ticker;
+        this.gptData = gptData;
     }
 
     @Builder
@@ -53,13 +57,14 @@ public class Coin {
         this.ticker = ticker;
     }
 
-    public static final Coin fromDTO(final String name, final BigDecimal prospects, final String picture, final Boolean isVisible, final String ticker) {
+    public static final Coin fromDTO(final String name, final BigDecimal prospects, final String picture, final Boolean isVisible, final String ticker, final  String gptData) {
         return Coin.builder()
                 .name(name)
                 .prospects(prospects)
                 .picture(picture)
                 .isVisible(isVisible)
                 .ticker(ticker)
+                .gptData(gptData)
                 .build();
     }
 

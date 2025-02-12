@@ -39,7 +39,7 @@ public class CoinServiceImpl implements CoinService {
     @Transactional(readOnly = true)
     public CoinDTO getCoinById(Long coinId){
         return coinRepository.findById(coinId)
-                .map(coin -> new CoinDTO(coin.getCoinId(), coin.getName(), coin.getProspects(), coin.getPicture(), coin.getIsVisible(), coin.getTicker()))
+                .map(coin -> new CoinDTO(coin.getCoinId(), coin.getName(), coin.getProspects(), coin.getPicture(), coin.getIsVisible(), coin.getTicker(), coin.getGptData()))
                 .orElseThrow(() -> new EntityNotFoundException("해당 코인을 찾을 수 없습니다. ID: " + coinId));
     }
 
