@@ -22,17 +22,15 @@ public class NewsDTO implements Serializable {
 
     private final LocalDateTime uploadTime;
 
-    private final String newsImage;
 
     @Builder
-    public NewsDTO(Long newsId, String title, String content, String newspaper, String source, LocalDateTime uploadTime, String newsImage) {
+    public NewsDTO(Long newsId, String title, String content, String newspaper, String source, LocalDateTime uploadTime) {
         this.newsId = newsId;
         this.title = title;
         this.content = content;
         this.newspaper = newspaper;
         this.source = source;
         this.uploadTime = uploadTime;
-        this.newsImage = newsImage;
     }
 
     public static NewsDTO fromEntity(News news){
@@ -43,7 +41,6 @@ public class NewsDTO implements Serializable {
                 .newspaper(news.getNewspaper())
                 .source(news.getSource())
                 .uploadTime(news.getUploadTime())
-                .newsImage(news.getNewsImage())
                 .build();
     }
 }

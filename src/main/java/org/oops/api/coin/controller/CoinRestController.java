@@ -2,6 +2,7 @@ package org.oops.api.coin.controller;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.oops.api.coin.dto.CoinDTO;
 import org.oops.api.coin.dto.CoinDetailsDTO;
 import org.oops.api.coin.dto.CoinFindByNameDTO;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/coin")
