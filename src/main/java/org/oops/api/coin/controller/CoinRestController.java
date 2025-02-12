@@ -42,14 +42,14 @@ public class CoinRestController extends BaseController {
     @GetMapping("/details/{name}")
     public ResponseEntity<?> getCoinDetails(@PathVariable String name) {
         // 코인 정보를 name으로 조회
-        CoinFindByNameDTO coin = coinService.findCoinByCoinName(name);
+        CoinDTO coin = coinService.findCoinByCoinName(name);
 
         if (coin == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("코인을 찾을 수 없습니다.");
         }
 
         // 관련 뉴스 조회
-        List<NewsDTO> newsList = newsService.getNewsByCoinId(coin.getId());
+        List<NewsDTO> newsList = newsService.getNewsByCoinId(coin.getCoinId());
 
         // DTO로 감싸서 반환
         CoinDetailsDTO response = CoinDetailsDTO.builder()

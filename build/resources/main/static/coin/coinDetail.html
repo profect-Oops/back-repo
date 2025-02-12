@@ -32,9 +32,12 @@
     </div>
 
     <!-- 동향 분석 박스 -->
-    <div class="bg-white p-3 rounded-lg shadow h-56 flex flex-col items-center justify-start pt-6 col-span-1">
+    <div class="bg-white p-3 rounded-lg shadow min-h-72 md:min-h-80 flex flex-col items-center justify-start pt-6 col-span-1">
         <h2 class="text-xl font-bold">최근 동향 흐름 분석</h2>
-        <div id="emotion-display" class="text-center text-5xl mt-7">😢</div>
+        <div class="text-center mt-7">
+            <div id="emotion-display" class="text-5xl"></div>
+            <p id="emotion-text" class="text-sm text-gray-500 mt-1"></p> <!-- 작은 글씨 추가 -->
+        </div>
         <div class="flex justify-center space-x-8 mt-10 w-full">
             <span class="text-3xl">😢</span>
             <span class="text-3xl">😞</span>
@@ -55,7 +58,9 @@
     <!-- 코인 정보 박스 -->
     <div class="bg-white p-4 rounded-lg shadow h-auto col-span-1">
         <h2 class="text-xl font-bold">코인 관련 일정</h2>
-        <p><strong>크리스마스: </strong>동심으로 돌아가 일확천금을 꿈꾸는 사람들로 인해 코인 값이 치솟는다.</p>
+        <div id="coin-gpt-data">
+            <p><strong>크리스마스:</strong> 동심으로 돌아가 일확천금을 꿈꾸는 사람들로 인해 코인 값이 치솟는다.</p>
+        </div>
     </div>
 </div>
 
@@ -89,7 +94,37 @@
                 .then(data => {
                     console.log("api 응답값: "+JSON.stringify(data, null, 2));
 
+                    // 코인 관련 일정(gptData) 삽입
+                    const coinGptData = document.getElementById("coin-gpt-data");
+                    if (coinGptData && data.coin.gptData) {
+                        coinGptData.innerHTML = `<p>${data.coin.gptData}</p>`;
+                    }
+
+                    //감성분석
+                    const emotionDisplay = document.getElementById("emotion-display");
+                    const emotionText = document.getElementById("emotion-text");
+                    const prospects = data.coin.prospects;
+
+                    if (prospects < -3) {
+                        emotionDisplay.textContent = "😢";
+                        emotionText.textContent = "매우 부정적";
+                    } else if (prospects >= -3 && prospects < 0) {
+                        emotionDisplay.textContent = "😞";
+                        emotionText.textContent = "다소 부정적";
+                    } else if (prospects === 0) {
+                        emotionDisplay.textContent = "😐";
+                        emotionText.textContent = "중립";
+                    } else if (prospects > 0 && prospects <= 3) {
+                        emotionDisplay.textContent = "😊";
+                        emotionText.textContent = "긍정적";
+                    } else if (prospects > 3) {
+                        emotionDisplay.textContent = "😃";
+                        emotionText.textContent = "매우 긍정적";
+                    }
+
+                    //뉴스
                     const newsContainer = document.querySelector(".news-box");
+
                     if (!newsContainer) {
                         console.error("🚨 .news-box 요소를 찾을 수 없습니다!");
                         return;

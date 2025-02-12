@@ -25,6 +25,7 @@ public class Coin {
     private String name;
 
     @Column(name = "PROSPECTS")
+    @ColumnDefault("0.0")
     private BigDecimal prospects;
 
     @Column(name = "COIN_PICTURE")
@@ -37,7 +38,7 @@ public class Coin {
     @Column(name = "TICKER")
     private String ticker;
 
-    @Column(name = "GPT_DATA")
+    @Column(name = "GPT_DATA", nullable = false)
     private String gptData;
 
     @Builder
@@ -76,6 +77,12 @@ public class Coin {
     public void prePersist() {
         if (this.isVisible == null) {
             this.isVisible = false;
+        }
+        if(this.prospects == null) {
+            this.prospects = new BigDecimal(0);
+        }
+        if(this.gptData == null) {
+            this.gptData = "";
         }
     }
 }

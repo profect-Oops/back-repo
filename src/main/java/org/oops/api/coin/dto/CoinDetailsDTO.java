@@ -10,11 +10,11 @@ import java.util.List;
 @Getter
 public class CoinDetailsDTO implements Serializable {
 
-    private CoinFindByNameDTO coin;
+    private CoinDTO coin;
     private List<NewsDTO> newsList;
 
     @Builder
-    public CoinDetailsDTO(CoinFindByNameDTO coin, List<NewsDTO> newsList) {
+    public CoinDetailsDTO(CoinDTO coin, List<NewsDTO> newsList) {
         this.coin = coin;
         this.newsList = newsList;
     }

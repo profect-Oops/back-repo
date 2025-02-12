@@ -46,7 +46,7 @@ public class AlertRestController extends BaseController {
         String email = user.getEmail();
 
         // 코인 이름으로 코인 조회
-        CoinFindByNameDTO coin = coinService.findCoinByCoinName(requestDTO.getCoinName());
+        CoinFindByNameDTO coin = coinService.findCoinIdByCoinName(requestDTO.getCoinName());
         if (coin == null) {
             // 코인을 찾을 수 없으면 에러 응답
             return ResponseEntity.status(404).body(ResponseDTO.error("해당 코인을 찾을 수 없습니다."));

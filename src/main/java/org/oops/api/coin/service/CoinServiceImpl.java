@@ -43,13 +43,25 @@ public class CoinServiceImpl implements CoinService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 코인을 찾을 수 없습니다. ID: " + coinId));
     }
 
-    //코인 이름으로 코인 조회
+    //코인 이름으로 코인Id 조회
     @Override
     @Transactional(readOnly = true)
-    public CoinFindByNameDTO findCoinByCoinName(String coinName){
+    public CoinFindByNameDTO findCoinIdByCoinName(String coinName){
         return coinRepository.findByName(coinName)
                 .map(coin -> new CoinFindByNameDTO(coin.getCoinId(), coin.getName()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 코인을 찾을 수 없습니다. coinName: " + coinName));
+    }
+
+    //코인 이름으로 코인 조회
+    @Override
+    @Transactional(readOnly = true)
+    public CoinDTO findCoinByCoinName(String coinName){
+        return coinRepository.findByName(coinName)
+                .map(
+                        coin -> new CoinDTO(coin.getCoinId(), coin.getName(), coin.getProspects(), coin.getPicture(), coin.getIsVisible(), coin.getTicker(), coin.getGptData())
+                ).orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 코인을 찾을 수 없습니다. coinName: " + coinName)
+                );
     }
 
     // 코인 추가
