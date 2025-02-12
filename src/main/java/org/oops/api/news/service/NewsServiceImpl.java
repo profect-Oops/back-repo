@@ -2,8 +2,6 @@ package org.oops.api.news.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.oops.api.coin.dto.CoinDTO;
-import org.oops.api.common.exception.BaseException;
 import org.oops.api.common.exception.NotFoundNewsException;
 import org.oops.api.news.dto.NewsDTO;
 import org.oops.domain.news.News;

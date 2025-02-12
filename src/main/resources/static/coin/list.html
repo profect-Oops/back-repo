@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top 10 Coins</title>
-    <script defer src="/js/script.js"></script>
+    <script src="/js/script.js" type="text/javascript" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
@@ -91,17 +91,6 @@
     </table>
 </div>
 
-<script>
-    // 세션에서 이메일 정보 가져와서 표시
-    fetch('/api/user/email')
-        .then(response => response.text())
-        .then(email => {
-            if (email.trim()) {
-                document.getElementById('email').textContent = email;
-                document.getElementById('email').classList.remove('hidden'); // 이메일 표시
-                document.getElementById('login-icon').classList.add('hidden'); // 로그인 아이콘 숨김
-            }
-        });
-</script>
+
 </body>
 </html>

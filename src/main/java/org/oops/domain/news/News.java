@@ -36,32 +36,27 @@ public class News {
     @Column(name = "UPLOADTIME")
     private LocalDateTime uploadTime;
 
-    @Column(name = "NEWS_IMAGE")
-    private String newsImage;
-
     @ManyToOne
     @JoinColumn(name = "COIN_ID")
     private Coin coinId;
 
     @Builder
-    public News(String title, String content, String newspaper, String source, LocalDateTime uploadTime, String newsImage, Coin coinId) {
+    public News(String title, String content, String newspaper, String source, LocalDateTime uploadTime,Coin coinId) {
         this.title = title;
         this.content = content;
         this.newspaper = newspaper;
         this.source = source;
         this.uploadTime = uploadTime;
-        this.newsImage = newsImage;
         this.coinId = coinId;
     }
 
-    public static final News fromDTO(final String title, final String content, final String newspaper, final String source, final LocalDateTime uploadTime, final String newsImage, final Coin coinId) {
+    public static final News fromDTO(final String title, final String content, final String newspaper, final String source, final LocalDateTime uploadTime, final Coin coinId) {
         return News.builder()
                 .title(title)
                 .content(content)
                 .newspaper(newspaper)
                 .source(source)
                 .uploadTime(uploadTime)
-                .newsImage(newsImage)
                 .coinId(coinId)
                 .build();
     }

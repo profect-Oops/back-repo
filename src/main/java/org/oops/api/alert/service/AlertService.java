@@ -63,4 +63,15 @@ public interface AlertService {
      */
     void deleteAlertById(Long alertId);
 
+    /**
+     * 내 알림의 총 개수 조회
+     *
+     * @param유저 아이디
+     */
+    int getTotalAlertCount(Long userId);
+
+    /**
+     * 내 알림 중 알림 활성화 된 알림 개수 조회
+     */
+    int getActiveAlertCount(Long userId);
 }

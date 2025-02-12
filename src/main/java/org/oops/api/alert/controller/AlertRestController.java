@@ -46,7 +46,7 @@ public class AlertRestController extends BaseController {
         String email = user.getEmail();
 
         // 코인 이름으로 코인 조회
-        CoinFindByNameDTO coin = coinService.findCoinByCoinName(requestDTO.getCoinName());
+        CoinFindByNameDTO coin = coinService.findCoinIdByCoinName(requestDTO.getCoinName());
         if (coin == null) {
             // 코인을 찾을 수 없으면 에러 응답
             return ResponseEntity.status(404).body(ResponseDTO.error("해당 코인을 찾을 수 없습니다."));
@@ -67,6 +67,21 @@ public class AlertRestController extends BaseController {
     public ResponseDTO<List<GetAlertResponseDTO>> getAlert(HttpSession session){
         SessionUser principal = (SessionUser) session.getAttribute("user");
         return ResponseDTO.ok(alertService.getAlertByUserId(principal.getId()));
+    }
+
+    //내 알림 개수 조회
+    @GetMapping(value = "count")
+    public Map<String, Integer> countAlert(HttpSession session){
+        SessionUser user = (SessionUser) session.getAttribute("user");
+        int totalAlerts = alertService.getTotalAlertCount(user.getId());
+        int activeAlerts = alertService.getActiveAlertCount(user.getId());
+        int inactiveAlerts = totalAlerts - activeAlerts;
+
+        return Map.of(
+                "total", totalAlerts,
+                "on", activeAlerts,
+                "off", inactiveAlerts
+        );
     }
 
     // 알림 활성화 여부 수정 -> 부분 업데이트: PATCH
