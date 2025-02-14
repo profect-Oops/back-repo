@@ -25,7 +25,7 @@ async function fetchMarketNames() {
     }
 }
 
-// Upbit API에서 거래량 상위 10개 코인을 가져오는 함수
+// Upbit API에서 코인을 가져오는 함수
 async function fetchTopCoins() {
     try {
         if (Object.keys(marketNames).length === 0) {
@@ -38,7 +38,7 @@ async function fetchTopCoins() {
         const tickerResponse = await fetch(API_URL + tickers);
         const tickerData = await tickerResponse.json();
 
-        // 거래량 기준으로 정렬하여 상위 10개 선택
+        // 거래량 기준으로 정렬하여 상위 10개 선택 -> 사용 안함
         const topCoins = tickerData
             .sort((a, b) => b.acc_trade_price_24h - a.acc_trade_price_24h) // 거래량 내림차순 정렬
             .slice(0, 10); // 상위 10개 선택
