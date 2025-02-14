@@ -20,6 +20,26 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    //웹소켓
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    // OkHttp WebSocket Client
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    // Jackson for JSON Parsing
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+    implementation 'org.apache.kafka:kafka-clients:3.8.0'
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2'
+
+    implementation 'ch.qos.logback:logback-classic:1.4.12'
+    implementation 'commons-codec:commons-codec:1.15'
+
+    //Redis 통신
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
