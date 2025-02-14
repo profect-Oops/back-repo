@@ -12,7 +12,7 @@ const scriptTag = document.querySelector('script[src*="upbit_websocket.js"]');
 const market = scriptTag && scriptTag.dataset.ticker ? `KRW-${scriptTag.dataset.ticker}` : "KRW-BTC"; // 기본값: KRW-BTC
 console.log(`market: ${market}`);
 
-// ✅ Lightweight 차트 초기화
+// Lightweight 차트 초기화
 function initializeLightweightChart() {
     const chartContainer = document.getElementById("tradingview-chart");
     if (!chartContainer) {
@@ -49,7 +49,7 @@ function initializeLightweightChart() {
         }
     });
 }
-// ✅ REST API로 과거 1분 캔들 데이터 가져오기
+// REST API로 과거 1분 캔들 데이터 가져오기
 async function fetchHistoricalCandles(count = 60, to = null) {
     let url = `https://api.upbit.com/v1/candles/minutes/1?market=${market}&count=${count}`;
     if (to) {
@@ -77,7 +77,7 @@ async function fetchHistoricalCandles(count = 60, to = null) {
         return [];
     }
 }
-// ✅ 과거 데이터 불러오기
+// 과거 데이터 불러오기
 async function loadMoreHistoricalCandles() {
     if (isLoading || candleData.length === 0) return;
     isLoading = true;
@@ -90,7 +90,7 @@ async function loadMoreHistoricalCandles() {
     }
     isLoading = false;
 }
-// ✅ 1분봉 변환 로직
+// 1분봉 변환 로직
 function processCandleData(candle) {
     const timestamp = Math.floor(candle.timestamp / 1000);
     const minuteTimestamp = timestamp - (timestamp % 60);
@@ -114,7 +114,7 @@ function processCandleData(candle) {
     }
     candleSeries.update(tempCandle);
 }
-// ✅ WebSocket 연결
+// WebSocket 연결
 function connectWebSocket() {
     if (socket) {
         socket.close();
@@ -151,13 +151,13 @@ function connectWebSocket() {
         socket.close();
     };
 }
-// ✅ 현재 가격 업데이트
+// 현재 가격 업데이트
 function updateCurrentPrice(price) {
     if (priceElement) {
         priceElement.textContent = `${price.toLocaleString("ko-KR")} 원`;
     }
 }
-// ✅ KST 시간 변환
+// KST 시간 변환
 function formatKSTTime(time) {
     const date = new Date(time * 1000);
     return date.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
@@ -169,7 +169,7 @@ function formatKSTTooltip(time) {
         hour: "2-digit", minute: "2-digit", second: "2-digit",
     });
 }
-// ✅ 실행
+// 실행
 window.onload = async function () {
     initializeLightweightChart();
     candleData = await fetchHistoricalCandles(60);

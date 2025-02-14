@@ -10,6 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -22,6 +28,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .csrf(
                         (csrfConfig) -> csrfConfig.disable()
                 )
@@ -32,13 +39,14 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers().hasRole(Role.USER.name())
-                        .requestMatchers("/", "/login","/login.html", "/css/**", "images/**", "/static/js/**", "/js/**", "/logout/*", "/api/coin/**", "/api/news/**", "/coin/list.html", "/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
+                        .requestMatchers("/", "/login","/login.html", "/css/**", "images/**", "/static/js/**", "/js/**", "/logout/*", "/api/coin/**", "/api/news/**", "/index.html", "/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
+                        .requestMatchers("/ws/**", "/api/**", "/api/coin/details/**").permitAll() // WebSocket 및 API 허용
                         .requestMatchers("/api/alert/**").authenticated()  //인증해야만 접속 가능
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션 유지
                 .logout( // 로그아웃 성공 시 / 주소로 이동
-                        (logoutConfig) -> logoutConfig.logoutSuccessUrl("/coin/list.html")
+                        (logoutConfig) -> logoutConfig.logoutSuccessUrl("/index.html")
                 )
                 // OAuth2 로그인 기능에 대한 여러 설정
                 .oauth2Login(oauth2 -> oauth2
@@ -46,7 +54,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/alert/alarm.html", false)  // false로 하면 기존 요청을 유지하면서 리다이렉트하지 않아서 세션 유지됨
                         .failureHandler((request, response, exception) -> {
                             log.error("로그인 실패! 이유: {}", exception.getMessage());
-                            response.sendRedirect("/coin/list.html");
+                            response.sendRedirect("/index.html");
                         })
                         .successHandler((request, response, authentication) -> {
                             // 로그인 성공 후 세션에 이메일 저장
@@ -58,11 +66,38 @@ public class SecurityConfig {
 
                             request.getSession().setAttribute("email", email);
 
-                            // /coin/list.html 페이지로 리다이렉트
+                            // /index.html 페이지로 리다이렉트
                             response.sendRedirect("/alert/alarm.html");
                         })
                 );
         return http.build();
+    }
+
+    // ✅ CORS 설정 추가
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of("http://localhost:5500", "http://localhost:8080")); // 허용할 프론트엔드 도메인 추가
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+
+    // ✅ CORS 설정을 WebSecurity에 적용
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:8080")); // ✅ CORS 허용
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 }
