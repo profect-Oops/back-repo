@@ -1,34 +1,35 @@
 package org.oops.api.coin.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.io.Serializable;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CoinCandleDTO implements Serializable {
-    private final String code;
-    private final Double openingPrice;
-    private final Double highPrice;
-    private final Double lowPrice;
-    private final Double tradePrice;
-    private final Double candleAccTradePrice;
-    private final Long timestamp;
 
-    @Builder
-    public CoinCandleDTO(String code, Double openingPrice, Double highPrice, Double lowPrice, Double tradePrice, Double candleAccTradePrice, Long timestamp) {
-        this.code = code;
-        this.openingPrice = openingPrice;
-        this.highPrice = highPrice;
-        this.lowPrice = lowPrice;
-        this.tradePrice = tradePrice;
-        this.candleAccTradePrice = candleAccTradePrice;
-        this.timestamp = timestamp;
-    }
+    @JsonProperty("market")
+    private String code;
 
-    @Override
-    public String toString() {
-        return String.format("CoinCandle{code='%s', openingPrice=%.2f, highPrice=%.2f, lowPrice=%.2f, tradePrice=%.2f, candleAccTradePrice=%.2f, timestamp=%d}",
-                code, openingPrice, highPrice, lowPrice, tradePrice, candleAccTradePrice, timestamp);
-    }
+    @JsonProperty("opening_price")
+    private Double openingPrice;
 
+    @JsonProperty("high_price")
+    private Double highPrice;
+
+    @JsonProperty("low_price")
+    private Double lowPrice;
+
+    @JsonProperty("trade_price")
+    private Double tradePrice;
+
+    @JsonProperty("candle_acc_trade_price")
+    private Double candleAccTradePrice;
+
+    @JsonProperty("timestamp")
+    private Long timestamp;
 }
+
