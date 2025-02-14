@@ -109,3 +109,37 @@ function reconnectWebSocket() {
         });
     }, 5000);
 }
+
+
+/*
+테스트 필요
+ */
+// 서버에 상위 10개 코인 정보 추가 요청
+async function addCoinsToServer(coins) {
+    try {
+        const coinInfoArray = coins.map(coin => {
+            // 필요한 정보를 담은 객체를 생성
+            const coinInfo = marketNames[coin.market] || { name: coin.market, ticker: coin.market.replace("KRW-", "") };
+            return {
+                ticker: coinInfo.ticker,
+                name: coinInfo.name,
+                picture: `https://static.upbit.com/logos/${coinInfo.ticker}.png`
+            };
+        });
+
+        // 서버에 POST 요청으로 데이터 전송
+        const response = await fetch('/api/coin/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(coinInfoArray) // 배열을 JSON 형식으로 서버로 전송
+        });
+
+        const result = await response.json(); // 응답 받은 데이터 처리
+        console.log("서버에 저장된 코인:", result);
+
+    } catch (error) {
+        console.error("서버에 코인 정보를 저장하는 중 오류 발생:", error);
+    }
+}
