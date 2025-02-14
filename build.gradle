@@ -37,7 +37,8 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.4.12'
     implementation 'commons-codec:commons-codec:1.15'
 
-    //Redis 통신
+    //케싱 및 Redis 통신
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     compileOnly 'org.projectlombok:lombok'

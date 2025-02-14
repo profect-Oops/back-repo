@@ -19,7 +19,7 @@ public class WebSocketDataService {
     }
 
     public void sendPriceUpdate(CoinPriceDTO price) {
-        logger.info("📤 가격 전체 데이터 전송: {}", price);
+        //logger.info("📤 가격 전체 데이터 전송: {}", price);
         messagingTemplate.convertAndSend("/topic/price", price);
     }
 
@@ -31,7 +31,7 @@ public class WebSocketDataService {
             return;
         }
         String destination = "/topic/priceDetail/" + price.getCode();
-        logger.info("📤 가격 데이터 전송: {} → {}", price, destination);
+        //logger.info("📤 가격 데이터 전송: {} → {}", price, destination);
         messagingTemplate.convertAndSend(destination, price);
     }
 
@@ -42,7 +42,7 @@ public class WebSocketDataService {
             return;
         }
         String destination = "/topic/candle/" + candle.getCode();
-        logger.info("📤 캔들 데이터 전송: {} → {}", candle, destination);
+        //logger.info("📤 캔들 데이터 전송: {} → {}", candle, destination);
         messagingTemplate.convertAndSend(destination, candle);
     }
 
