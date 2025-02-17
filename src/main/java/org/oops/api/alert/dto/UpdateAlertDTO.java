@@ -15,13 +15,15 @@ public class UpdateAlertDTO {
         private Boolean alertActive;
         private Long coinId;
         private Long userId;
+        private String coinName;
 
-        public UpdateAlertRequestDTO(Long alertId, Boolean alertActive, BigDecimal alertPrice, Long coinId, Long userId) {
+        public UpdateAlertRequestDTO(Long alertId, Boolean alertActive, BigDecimal alertPrice, Long coinId, Long userId, String coinName) {
             this.alertId = alertId;
             this.alertPrice = alertPrice;
             this.alertActive = alertActive;
             this.coinId = coinId;
             this.userId = userId;
+            this.coinName = coinName;
         }
     }
 

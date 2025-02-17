@@ -12,12 +12,6 @@ import java.util.List;
  * @author: MJLee39
  */
 public interface CoinService {
-    /**
-     * 거래량 순위 10위 안의 코인을 리스트 형태로 모두 보여줍니다.
-     *
-     * @return 코인DTO 리스트 응답
-     */
-    List<CoinDTO> getVisibleCoins();
 
     /**
      * 한 코인의 정보를 보여줍니다.

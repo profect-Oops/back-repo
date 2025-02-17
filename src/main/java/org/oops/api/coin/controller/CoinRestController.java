@@ -28,11 +28,6 @@ public class CoinRestController extends BaseController {
     private final CoinService coinService;
     private final NewsService newsService;
 
-    @GetMapping(value = "/read")
-    public ResponseDTO<List<CoinDTO>> getCoinsList(){
-        return ResponseDTO.ok(coinService.getVisibleCoins());
-    }
-
     @GetMapping(value = "/read/{coinId}")
     public ResponseDTO<CoinDTO> getCoin(@PathVariable Long coinId){
         return ResponseDTO.ok(coinService.getCoinById(coinId));
