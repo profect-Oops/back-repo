@@ -14,6 +14,11 @@ import java.util.List;
 public interface CoinService {
 
     /**
+     * coin 모두 조회
+     */
+    List<CoinDTO> getAllCoins();
+
+    /**
      * 한 코인의 정보를 보여줍니다.
      *
      * @return 코인DTO 응답
