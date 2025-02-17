@@ -28,6 +28,12 @@ public class CoinRestController extends BaseController {
     private final CoinService coinService;
     private final NewsService newsService;
 
+    @GetMapping("/list")
+    public ResponseEntity<List<CoinDTO>> getAllCoins() {
+        List<CoinDTO> coins = coinService.getAllCoins();
+        return ResponseEntity.ok(coins);
+    }
+
     @GetMapping(value = "/read/{coinId}")
     public ResponseDTO<CoinDTO> getCoin(@PathVariable Long coinId){
         return ResponseDTO.ok(coinService.getCoinById(coinId));

@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+/**
+ * 레디스 서버 테스트용
+ */
 @RestController
 @RequestMapping("/api/redis")
 public class RedisController {
