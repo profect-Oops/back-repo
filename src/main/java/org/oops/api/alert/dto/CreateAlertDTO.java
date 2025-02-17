@@ -30,14 +30,18 @@ public class CreateAlertDTO {
         private Boolean alertActive;
         private Long coinId;
         private Long userId;
+        private String coinName;
+        private String ticker;
 
         @Builder
-        public CreateAlertResponseDTO(Long alertId, BigDecimal alertPrice, Boolean alertActive, Long coinId, Long userId) {
+        public CreateAlertResponseDTO(Long alertId, BigDecimal alertPrice, Boolean alertActive, Long coinId, Long userId, String coinName, String ticker) {
             this.alertId = alertId;
             this.alertPrice = alertPrice;
             this.alertActive = alertActive;
             this.coinId = coinId;
             this.userId = userId;
+            this.coinName = coinName;
+            this.ticker = ticker;
         }
 
         public static CreateAlertResponseDTO fromEntity(Alert alert) {
@@ -47,6 +51,8 @@ public class CreateAlertDTO {
                     .alertActive(alert.getAlertActive())
                     .coinId(alert.getCoin().getCoinId())
                     .userId(alert.getUserId().getUserId())
+                    .coinName(alert.getCoin().getName())
+                    .ticker(alert.getCoin().getTicker())
                     .build();
         }
     }

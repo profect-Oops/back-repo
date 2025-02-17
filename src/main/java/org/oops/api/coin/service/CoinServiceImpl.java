@@ -28,27 +28,18 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CoinDTO> getVisibleCoins(){
-        return coinRepository.findByIsVisibleTrue()
-                .stream()
-                .map(CoinDTO::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public CoinDTO getCoinById(Long coinId){
         return coinRepository.findById(coinId)
-                .map(coin -> new CoinDTO(coin.getCoinId(), coin.getName(), coin.getProspects(), coin.getPicture(), coin.getIsVisible(), coin.getTicker(), coin.getGptData()))
+                .map(coin -> new CoinDTO(coin.getCoinId(), coin.getName(), coin.getProspects(), coin.getPicture(), coin.getTicker(), coin.getGptData()))
                 .orElseThrow(() -> new EntityNotFoundException("해당 코인을 찾을 수 없습니다. ID: " + coinId));
     }
 
-    //코인 이름으로 코인Id 조회
+    //코인 이름으로 코인Id, ticker 조회
     @Override
     @Transactional(readOnly = true)
     public CoinFindByNameDTO findCoinIdByCoinName(String coinName){
         return coinRepository.findByName(coinName)
-                .map(coin -> new CoinFindByNameDTO(coin.getCoinId(), coin.getName()))
+                .map(coin -> new CoinFindByNameDTO(coin.getCoinId(), coin.getName(), coin.getTicker()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 코인을 찾을 수 없습니다. coinName: " + coinName));
     }
 
@@ -58,7 +49,7 @@ public class CoinServiceImpl implements CoinService {
     public CoinDTO findCoinByCoinName(String coinName){
         return coinRepository.findByName(coinName)
                 .map(
-                        coin -> new CoinDTO(coin.getCoinId(), coin.getName(), coin.getProspects(), coin.getPicture(), coin.getIsVisible(), coin.getTicker(), coin.getGptData())
+                        coin -> new CoinDTO(coin.getCoinId(), coin.getName(), coin.getProspects(), coin.getPicture(), coin.getTicker(), coin.getGptData())
                 ).orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 코인을 찾을 수 없습니다. coinName: " + coinName)
                 );

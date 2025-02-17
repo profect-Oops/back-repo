@@ -21,13 +21,6 @@ public class CoinController extends BaseController {
 
     private final CoinService coinService;
 
-    @GetMapping(value = "/read")
-    public String getCoinsList(Model model) {
-        List<CoinDTO> coins = coinService.getVisibleCoins();
-        model.addAttribute("coins", coins);
-        return "coin/list";
-    }
-
     @GetMapping(value = "/read/{coinId}")
     public String getCoin(@PathVariable Long coinId, Model model) {
         CoinDTO coin = coinService.getCoinById(coinId);

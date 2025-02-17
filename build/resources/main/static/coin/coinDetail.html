@@ -83,9 +83,9 @@
         script.src = `../js/detail_front.js`;
         script.dataset.ticker = coinTicker;
         document.body.appendChild(script);
-
+        logo = `${coinTicker}`.replace("KRW-","");
         if (coinName && coinTicker) {
-            document.getElementById("coin-logo").src = `https://static.upbit.com/logos/${coinTicker}.png`;
+            document.getElementById("coin-logo").src = `https://static.upbit.com/logos/${logo}.png`;
             document.getElementById("coin-logo").alt = coinName;
             document.getElementById("coin-name").textContent = coinName;
             document.getElementById("coin-ticker").textContent = `KRW-${coinTicker}`;

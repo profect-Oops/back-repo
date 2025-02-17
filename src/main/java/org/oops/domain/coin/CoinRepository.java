@@ -9,8 +9,6 @@ import java.util.Optional;
 @Repository
 public interface CoinRepository extends JpaRepository<Coin, Long> {
 
-    List<Coin> findByIsVisibleTrue();
-
     Optional<Coin> findByName(String name);
 
     Optional<Coin> findByTicker(String ticker);
