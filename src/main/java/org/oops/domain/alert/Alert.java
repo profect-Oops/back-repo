@@ -38,20 +38,35 @@ public class Alert {
     @JoinColumn(name = "USER_ID")
     private User userId;
 
+    @Column(name = "COIN_NAME")
+    private String coinName;
+
+    @Column(name = "COIN_TICKER")
+    private String coinTicker;
+
+    @Column(name = "EMAIL")
+    private String email;
+
     @Builder
-    public Alert(BigDecimal alertPrice, Boolean alertActive, Coin coin, User userId) {
+    public Alert(BigDecimal alertPrice, Boolean alertActive, Coin coin, User userId, String coinName, String coinTicker, String email) {
         this.alertPrice = alertPrice;
         this.alertActive = alertActive;
         this.coin = coin;
         this.userId = userId;
+        this.coinName = coinName;
+        this.coinTicker = coinTicker;
+        this.email = email;
     }
 
-    public static final Alert fromDTO(final BigDecimal alertPrice, final Boolean alertActive, final Coin coin, final User userId) {
+    public static final Alert fromDTO(final BigDecimal alertPrice, final Boolean alertActive, final Coin coin, final User userId, final String coinName, final String coinTicker, final String email) {
         return Alert.builder()
                 .alertPrice(alertPrice)
                 .alertActive(alertActive)
                 .coin(coin)
                 .userId(userId)
+                .coinName(coinName)
+                .coinTicker(coinTicker)
+                .email(email)
                 .build();
     }
 

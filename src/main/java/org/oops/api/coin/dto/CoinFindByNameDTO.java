@@ -9,9 +9,10 @@ import org.oops.domain.coin.Coin;
 public class CoinFindByNameDTO {
     private Long id;
     private String name;
+    private String ticker;
 
     public static CoinFindByNameDTO fromEntity(Coin coin) {
-        return new CoinFindByNameDTO(coin.getCoinId(), coin.getName());
+        return new CoinFindByNameDTO(coin.getCoinId(), coin.getName(), coin.getTicker());
     }
 }
 

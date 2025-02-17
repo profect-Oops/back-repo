@@ -19,19 +19,16 @@ public class CoinDTO implements Serializable {
 
     private final String picture;
 
-    private final Boolean isVisible;
-
     private final String ticker;
 
     private final String gptData;
 
     @Builder
-    public CoinDTO(Long coinId, String name, BigDecimal prospects, String picture, Boolean isVisible, String ticker, String gptData){
+    public CoinDTO(Long coinId, String name, BigDecimal prospects, String picture, String ticker, String gptData){
         this.coinId = coinId;
         this.name = name;
         this.prospects = prospects;
         this.picture = picture;
-        this.isVisible = isVisible;
         this.ticker = ticker;
         this.gptData = gptData;
     }
@@ -42,7 +39,6 @@ public class CoinDTO implements Serializable {
                 .name(coin.getName())
                 .prospects(coin.getProspects())
                 .picture(coin.getPicture())
-                .isVisible(coin.getIsVisible())
                 .ticker(coin.getTicker())
                 .gptData(coin.getGptData())
                 .build();
