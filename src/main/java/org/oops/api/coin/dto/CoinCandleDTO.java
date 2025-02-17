@@ -9,6 +9,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class CoinCandleDTO implements Serializable {
 
     @JsonProperty("market")
