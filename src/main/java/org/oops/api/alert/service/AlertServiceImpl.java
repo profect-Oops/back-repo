@@ -48,7 +48,10 @@ public class AlertServiceImpl implements AlertService {
                         request.getAlertPrice(),
                         request.getAlertActive(),
                         coin,
-                        user
+                        user,
+                        request.getCoinName(),
+                        coin.getTicker(),
+                        email
                 )
         );
         return CreateAlertDTO.CreateAlertResponseDTO.fromEntity(alert);
