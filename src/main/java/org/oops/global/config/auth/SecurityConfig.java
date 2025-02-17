@@ -39,8 +39,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers().hasRole(Role.USER.name())
-                        .requestMatchers("/", "/login","/login.html", "/css/**", "images/**", "/static/js/**", "/js/**", "/logout/*", "/api/coin/**", "/api/news/**", "/index.html", "/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
-                        .requestMatchers("/ws/**", "/api/**", "/api/coin/details/**").permitAll() // WebSocket 및 API 허용
+                        .requestMatchers("/", "/login","/login.html", "/css/**", "images/**", "/static/js/**", "/js/**", "/logout/*", "/api/coin/**", "/api/coin/add", "/api/coin/details","/api/news/**", "/index.html", "/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
+                        .requestMatchers("/ws/**", "/api/**", "/api/coin/details/**", "/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
                         .requestMatchers("/api/alert/**").authenticated()  //인증해야만 접속 가능
                         .anyRequest().authenticated()
                 )

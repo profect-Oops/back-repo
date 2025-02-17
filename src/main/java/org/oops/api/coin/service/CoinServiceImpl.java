@@ -28,6 +28,13 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<CoinDTO> getAllCoins(){
+        List<Coin> coins = coinRepository.findAll();
+        return coins.stream().map(CoinDTO::fromEntity).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public CoinDTO getCoinById(Long coinId){
         return coinRepository.findById(coinId)
                 .map(coin -> new CoinDTO(coin.getCoinId(), coin.getName(), coin.getProspects(), coin.getPicture(), coin.getTicker(), coin.getGptData()))
