@@ -79,7 +79,7 @@ function initializeLightweightChart() {
     });
 }
 
-// 📌 과거 데이터 불러오기 (레디스 → Upbit API 요청)
+// 과거 데이터 불러오기 (레디스 → Upbit API 요청)
 async function loadMoreHistoricalCandles() {
     if (isLoading || candleData.length === 0) {
         console.warn("⚠️ 데이터가 없거나, 이미 로딩 중입니다.");
@@ -99,7 +99,7 @@ async function loadMoreHistoricalCandles() {
 
     console.log(`📅 과거 데이터 요청 시간: ${toDate}`);
 
-    // ✅ `to` 값을 포함하여 요청
+    // `to` 값을 포함하여 요청
     const historicalCandles = await fetchHistoricalCandlesFromServer(30, toDate);
 
     if (!historicalCandles || historicalCandles.length === 0) {
