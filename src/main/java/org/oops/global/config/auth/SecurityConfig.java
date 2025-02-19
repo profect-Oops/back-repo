@@ -43,8 +43,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers().hasRole(Role.USER.name())
                         .requestMatchers("/", "/login","/login.html", "/css/**", "images/**", "/static/js/**", "/js/**", "/logout/*", "/api/coin/**", "/api/coin/add", "/api/coin/details","/api/news/**", "/index.html", "/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
-                        .requestMatchers("/ws/**", "/api/**", "/api/coin/details/**", "/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
-                        .requestMatchers("/api/alert/**","/alert/alarm.html").authenticated()  //인증해야만 접속 가능
+                        .requestMatchers("/ws/**", "/api/coin/details/**", "/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
+                        .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션 유지
@@ -99,7 +99,11 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:5500", "http://localhost:8080")); // 허용할 프론트엔드 도메인 추가
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5500",
+                "http://localhost:8080",
+                "https://ec2-13-125-5-111.ap-northeast-2.compute.amazonaws.com", // EC2 직접 접속
+                "https://d3pdkkr961vb7.cloudfront.net")); // 허용할 프론트엔드 도메인
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         source.registerCorsConfiguration("/**", config);
@@ -110,7 +114,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:8080")); // ✅ CORS 허용
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5500",
+                "http://localhost:8080",
+                "https://d3pdkkr961vb7.cloudfront.net" // CloudFront 추가
+                )); // CORS 허용
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));

@@ -40,51 +40,52 @@ public class LoginController {
         return "login";
     }
 
-    //일반 로그아웃
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpSession session, HttpServletResponse response) {
-        // 세션에서 사용자 정보 삭제
-        session.removeAttribute("user");
-        session.removeAttribute("email");
-        session.removeAttribute("SPRING_SECURITY_CONTEXT");
-
-        // Spring Security 인증 정보 삭제
-        SecurityContextHolder.clearContext();
-
-        session.invalidate();
-
-        // JSESSIONID 쿠키 삭제 (세션 무효화)
-        response.setHeader("Set-Cookie", "JSESSIONID=; Path=/; HttpOnly; Max-Age=0; SameSite=None; Secure");
-
-        // 캐시 방지 (로그아웃 후 새로고침하면 캐시된 세션이 없어지도록 설정)
-        response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
-        response.setHeader("Pragma", "no-cache");
-        response.setHeader("Expires", "0");
-
-        try {
-            response.sendRedirect("/index.html"); // 로그아웃 후 index.html로 리다이렉트
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok().build();
-    }
-
-    // 소셜 로그아웃 (OAuth2 제공자 로그아웃 URL로 리다이렉트)
-    @GetMapping("/oauth/logout")
-    public void socialLogout(HttpSession session, HttpServletResponse response) throws IOException {
-        session.removeAttribute("email");
-        session.removeAttribute("SPRING_SECURITY_CONTEXT");
-        session.invalidate();
-        SecurityContextHolder.clearContext();
-        response.setHeader("Set-Cookie", "JSESSIONID=; Path=/; HttpOnly; Max-Age=0; SameSite=None; Secure");
-
-
-        String logoutUrl = "/index.html"; // 기본 로그아웃 후 이동할 URL
-
-        // 🚀 Google OAuth2 로그아웃 URL
-        logoutUrl = "https://accounts.google.com/logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:8080/login.html";
-
-
-        response.sendRedirect(logoutUrl); // 소셜 로그아웃 URL로 이동
-    }
+    //로그아웃 기능은 지원하지 않음
+//    //일반 로그아웃
+//    @PostMapping("/logout")
+//    public ResponseEntity<Void> logout(HttpSession session, HttpServletResponse response) {
+//        // 세션에서 사용자 정보 삭제
+//        session.removeAttribute("user");
+//        session.removeAttribute("email");
+//        session.removeAttribute("SPRING_SECURITY_CONTEXT");
+//
+//        // Spring Security 인증 정보 삭제
+//        SecurityContextHolder.clearContext();
+//
+//        session.invalidate();
+//
+//        // JSESSIONID 쿠키 삭제 (세션 무효화)
+//        response.setHeader("Set-Cookie", "JSESSIONID=; Path=/; HttpOnly; Max-Age=0; SameSite=None; Secure");
+//
+//        // 캐시 방지 (로그아웃 후 새로고침하면 캐시된 세션이 없어지도록 설정)
+//        response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+//        response.setHeader("Pragma", "no-cache");
+//        response.setHeader("Expires", "0");
+//
+//        try {
+//            response.sendRedirect("/index.html"); // 로그아웃 후 index.html로 리다이렉트
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    // 소셜 로그아웃 (OAuth2 제공자 로그아웃 URL로 리다이렉트)
+//    @GetMapping("/oauth/logout")
+//    public void socialLogout(HttpSession session, HttpServletResponse response) throws IOException {
+//        session.removeAttribute("email");
+//        session.removeAttribute("SPRING_SECURITY_CONTEXT");
+//        session.invalidate();
+//        SecurityContextHolder.clearContext();
+//        response.setHeader("Set-Cookie", "JSESSIONID=; Path=/; HttpOnly; Max-Age=0; SameSite=None; Secure");
+//
+//
+//        String logoutUrl = "/index.html"; // 기본 로그아웃 후 이동할 URL
+//
+//        // 🚀 Google OAuth2 로그아웃 URL
+//        logoutUrl = "https://accounts.google.com/logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:8080/login.html";
+//
+//
+//        response.sendRedirect(logoutUrl); // 소셜 로그아웃 URL로 이동
+//    }
 }
