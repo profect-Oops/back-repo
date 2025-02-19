@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: oops
+---
+spring:
+  profiles:
+    include: oauth
+---
+spring:
+  datasource:
+    #url: jdbc:mysql://localhost:3306/oops #로컬 mysql
+    url: jdbc:mysql://mysql-db:3306/oops   #docker container mysql
+    username: root
+    password: mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  data:
+    redis:
+      host: redis  # Docker 네트워크 내 컨테이너 이름 사용
+      port: 6379
+---
+server:
+  port: 8080
+  cors:
+    allowed-origins:
+      - "https://d3pdkkr961vb7.cloudfront.net"
