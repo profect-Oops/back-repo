@@ -32,14 +32,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, OAuth2AuthorizedClientService authorizedClientService) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
-                .csrf(
-                        (csrfConfig) -> csrfConfig.disable()
-                )
-                .headers(
-                        (headerConfig) -> headerConfig.frameOptions(
-                                frameOptionsConfig -> frameOptionsConfig.disable()
-                        )
-                )
+                .csrf(csrf -> csrf.disable()) // CSRF 비활성화
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // iframe 허용
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers().hasRole(Role.USER.name())
                         .requestMatchers("/", "/login","/login.html", "/css/**", "images/**", "/static/js/**", "/js/**", "/logout/*", "/api/coin/**", "/api/coin/add", "/api/coin/details","/api/news/**", "/index.html", "/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
@@ -93,28 +87,16 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // CORS 설정 추가
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*"); // 모든 도메인 허용
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
-
     // CORS 설정을 WebSecurity에 적용
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5500",
                 "http://localhost:8080",
-                "https://d3pdkkr961vb7.cloudfront.net" // CloudFront 추가
-                )); // CORS 허용
+                "https://d3pdkkr961vb7.cloudfront.net"
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
