@@ -99,11 +99,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of(
-                "http://localhost:5500",
-                "http://localhost:8080",
-                "https://ec2-13-125-5-111.ap-northeast-2.compute.amazonaws.com", // EC2 직접 접속
-                "https://d3pdkkr961vb7.cloudfront.net")); // 허용할 프론트엔드 도메인
+        config.addAllowedOriginPattern("*"); // 모든 도메인 허용
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         source.registerCorsConfiguration("/**", config);
