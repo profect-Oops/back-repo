@@ -1,6 +1,8 @@
 HELP.md
 .gradle
 
+.env
+
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -36,19 +38,18 @@ out/
 ### VS Code ###
 .vscode/
 
+### DEV ###
+#application.yml
+#src/test/resources/application.yml
+#src/main/resources/application-oauth.yml
+#application-oauth.yml
+#src/test/resources/application-oauth.yml
 
 ### VS Code ###
 .vscode/
 
 ### MAC OS ###
 .DS_Store
-
-### DEV ###
-application.yml
-src/test/resources/application.yml
-src/main/resources/application-oauth.yml
-application-oauth.yml
-src/test/resources/application-oauth.yml
 
 # q type이 들어있는 generated는 무시
 /src/main/generated/build/tmp/

@@ -1,14 +1,23 @@
-# Base image 변경: slim 사용
-FROM openjdk:17-slim
-
-# 필수 패키지 설치 (ping, netcat, nslookup, curl)
-RUN apt-get update && apt-get install -y iputils-ping netcat dnsutils curl && rm -rf /var/lib/apt/lists/*
+# === Build Stage ===
+FROM eclipse-temurin:17-jdk-alpine AS builder
 
 # Set work directory
 WORKDIR /app
 
-# Copy application jar file
-COPY build/libs/oops-1.0-SNAPSHOT.jar app.jar
+# Copy source code
+COPY . .
+
+# Build JAR file (Gradle)
+RUN ./gradlew clean build -x test
+
+# === Run Stage ===
+FROM eclipse-temurin:17-jre-alpine AS runtime
+
+# Set work directory
+WORKDIR /app
+
+# Copy only the built JAR from build stage
+COPY --from=builder /app/build/libs/oops-1.0-SNAPSHOT.jar app.jar
 
 # Expose the application port
 EXPOSE 8080
