@@ -38,7 +38,7 @@ public class SecurityConfig {
                         //.requestMatchers().hasRole(Role.USER.name())
                         .requestMatchers("/", "/login","/login.html", "/css/**", "images/**", "/static/js/**", "/js/**", "/logout/*", "/api/coin/**", "/api/coin/add", "/api/coin/details","/api/news/**", "/index.html", "/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
                         .requestMatchers("/ws/**", "/api/coin/details/**", "/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
-                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/api/**","/oauth2/**", "/login/oauth2/**").permitAll()  //추가!
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션 유지
@@ -103,6 +103,8 @@ public class SecurityConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/oauth2/**", configuration);  // OAuth2 CORS 허용
+        source.registerCorsConfiguration("/login/oauth2/**", configuration);  // OAuth2 로그인 리디렉션 허용
         return source;
     }
 
