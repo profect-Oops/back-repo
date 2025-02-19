@@ -15,7 +15,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
   data:
     redis:
@@ -25,4 +25,5 @@ spring:
 server:
   port: 8080
   cors:
-    allowed-origins: "*"
+    allowed-origins:
+      - "https://d3pdkkr961vb7.cloudfront.net"
