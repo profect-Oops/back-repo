@@ -95,7 +95,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5500",
                 "http://localhost:8080",
-                "https://d3pdkkr961vb7.cloudfront.net"
+                "https://d3pdkkr961vb7.cloudfront.net",
+                "https://todaycoinfo.com/"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
