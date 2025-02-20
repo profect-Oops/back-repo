@@ -9,10 +9,11 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 public class CorsConfig implements WebMvcConfigurer {
 
+    // 정적 페이지에서 api 호출 시 CORS에러 방지
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 모든 엔드포인트에 대해 CORS 적용
-                .allowedOrigins("http://localhost:5500", "http://localhost:8080", "https://d3pdkkr961vb7.cloudfront.net", "https://todaycoinfo.com/")
+                .allowedOrigins("http://localhost:5500", "http://localhost:8080", "https://d3pdkkr961vb7.cloudfront.net", "https://todaycoinfo.com")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
