@@ -64,7 +64,7 @@ public class CoinRestController extends BaseController {
         return coinService.addCoinsToDatabase(coinInfoArray); // 코인 정보를 DB에 추가
     }
 
-    //코인 수정
+    //코인 수정 - 코인 이름, 사진만 수정
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO<String>> updateCoinInfo(@RequestBody List<CoinUpdateDTO> coinUpdateList) {
         boolean updated = coinService.updateCoinInfo(coinUpdateList);
