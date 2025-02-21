@@ -19,8 +19,8 @@ spring:
     show-sql: true
   data:
     redis:
-      #host: redis  # 로컬 Docker 네트워크 내 컨테이너 이름 사용
-      host: 10.0.6.127
+      host: redis  # 로컬 Docker 네트워크 내 컨테이너 이름 사용
+      #host: 10.0.6.127   # 레디스 서버 분리
       port: 6379
 ---
 server:
