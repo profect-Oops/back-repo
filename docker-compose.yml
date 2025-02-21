@@ -9,21 +9,21 @@ services:
     ports:
       - "3306:3306"
     networks:
-      - redis-net
+      - app-net
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
       retries: 5
       start_period: 30s
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    restart: always
-    networks:
-      - redis-net
-    ports:
-      - "6379:6379"
+#  redis:
+#    image: redis:latest
+#    container_name: redis
+#    restart: always
+#    networks:
+#      - app-net
+#    ports:
+#      - "6379:6379"
 
   spring_app:
     build:
@@ -34,19 +34,18 @@ services:
     depends_on:
       mysql:
         condition: service_healthy  # MySQL이 완전히 실행될 때까지 기다림
-      redis:
-        condition: service_started
     networks:
-      - redis-net
+      - app-net
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/oops
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: mysql
-      SPRING_REDIS_HOST: redis  #추가
+      #SPRING_REDIS_HOST: redis  #로컬
+      SPRING_REDIS_HOST: 10.0.6.127  #추가
       SPRING_REDIS_PORT: 6379   #추가
     ports:
       - "8080:8080"
 
 networks:
-  redis-net:
+  app-net:
     driver: bridge
