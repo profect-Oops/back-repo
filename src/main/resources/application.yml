@@ -27,3 +27,4 @@ server:
   cors:
     allowed-origins:
       - "https://d3pdkkr961vb7.cloudfront.net"
+      - "https://todaycoinfo.com"

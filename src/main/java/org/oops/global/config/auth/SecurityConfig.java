@@ -8,15 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
@@ -30,14 +27,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, OAuth2AuthorizedClientService authorizedClientService) throws Exception {
+        log.info("Google Client ID: {}", System.getenv("GOOGLE_CLIENT_ID"));
+        log.info("Google Client Secret: {}", System.getenv("GOOGLE_CLIENT_SECRET"));
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // iframe 허용
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers().hasRole(Role.USER.name())
-                        .requestMatchers("/", "/login","/login.html", "/css/**", "images/**", "/static/js/**", "/js/**", "/logout/*", "/api/coin/**", "/api/coin/add", "/api/coin/details","/api/news/**", "/index.html", "/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
-                        .requestMatchers("/ws/**", "/api/coin/details/**", "/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
+                        .requestMatchers("/", "/login", "/static/login.html", "/css/**", "images/**", "/static/js/**", "/static/js/**", "/logout/*", "/api/coin/**", "/api/coin/add", "/api/coin/details","/api/news/**", "/static/index.html", "/static/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
+                        .requestMatchers("/ws/**", "/api/coin/details/**", "/static/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
                         .requestMatchers("/api/**","/oauth2/**", "/login/oauth2/**").permitAll()  //추가!
                         .anyRequest().authenticated()
                 )
@@ -46,16 +45,18 @@ public class SecurityConfig {
                         .invalidateHttpSession(true) // 세션 무효화
                         .deleteCookies("JSESSIONID") // JSESSIONID 쿠키 삭제
                         .clearAuthentication(true) // 인증 정보 초기화
-                        .logoutSuccessUrl("/index.html") // 로그아웃 후 index.html로 이동
+                        .logoutSuccessUrl("/static/index.html") // 로그아웃 후 index.html로 이동
                         .permitAll()
                 )
                 // OAuth2 로그인 기능에 대한 여러 설정
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/alert/alarm.html", false)  // false로 하면 기존 요청을 유지하면서 리다이렉트하지 않아서 세션 유지됨
+                        .defaultSuccessUrl("/static/alert/alarm.html", false)  // false로 하면 기존 요청을 유지하면서 리다이렉트하지 않아서 세션 유지됨
                         .failureHandler((request, response, exception) -> {
+                            log.info("Google Client ID: {}", System.getenv("GOOGLE_CLIENT_ID"));
+                            log.info("Google Client Secret: {}", System.getenv("GOOGLE_CLIENT_SECRET"));
                             log.error("로그인 실패! 이유: {}", exception.getMessage());
-                            response.sendRedirect("/index.html");
+                            response.sendRedirect("/static/index.html");
                         })
                         .successHandler((request, response, authentication) -> {
                             // 로그인 성공 후 세션에 이메일 저장
@@ -77,11 +78,12 @@ public class SecurityConfig {
 
                             // 로그인 성공 로그
                             log.info("로그인 성공! 이메일: {}", email);
-
+                            log.info("Google Client ID: {}", System.getenv("GOOGLE_CLIENT_ID"));
+                            log.info("Google Client Secret: {}", System.getenv("GOOGLE_CLIENT_SECRET"));
                             request.getSession().setAttribute("email", email);
 
                             // /index.html 페이지로 리다이렉트
-                            response.sendRedirect("/alert/alarm.html");
+                            response.sendRedirect("/static/alert/alarm.html");
                         })
                 );
         return http.build();

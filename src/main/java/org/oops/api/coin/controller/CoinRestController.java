@@ -3,10 +3,7 @@ package org.oops.api.coin.controller;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.oops.api.coin.dto.CoinDTO;
-import org.oops.api.coin.dto.CoinDetailsDTO;
-import org.oops.api.coin.dto.CoinFindByNameDTO;
-import org.oops.api.coin.dto.CreateCoinDTO;
+import org.oops.api.coin.dto.*;
 import org.oops.api.coin.service.CoinService;
 import org.oops.api.common.controller.BaseController;
 import org.oops.api.common.dto.ResponseDTO;
@@ -65,6 +62,17 @@ public class CoinRestController extends BaseController {
     @PostMapping("/add")
     public List<CreateCoinDTO> addCoinsToServer(@RequestBody List<CreateCoinDTO> coinInfoArray) {
         return coinService.addCoinsToDatabase(coinInfoArray); // 코인 정보를 DB에 추가
+    }
+
+    //코인 수정
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDTO<String>> updateCoinInfo(@RequestBody List<CoinUpdateDTO> coinUpdateList) {
+        boolean updated = coinService.updateCoinInfo(coinUpdateList);
+        if (updated) {
+            return ResponseEntity.ok(ResponseDTO.ok("✅ 코인 정보 업데이트 완료."));
+        } else {
+            return ResponseEntity.badRequest().body(ResponseDTO.error("🚨 업데이트할 코인이 없습니다."));
+        }
     }
 
 }

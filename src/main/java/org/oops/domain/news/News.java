@@ -24,8 +24,14 @@ public class News {
     @Column(name = "TITLE")
     private String title;
 
-    @Column(name = "CONTENT", columnDefinition = "varchar(1000)")
+    @Column(name = "TITLE_EN")
+    private String titleEN;
+
+    @Column(name = "CONTENT")
     private String content;
+
+    @Column(name = "CONTENT_EN")
+    private String contentEN;
 
     @Column(name = "NEWSPAPER")
     private String newspaper;

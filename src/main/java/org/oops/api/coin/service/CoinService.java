@@ -2,6 +2,7 @@ package org.oops.api.coin.service;
 
 import org.oops.api.coin.dto.CoinDTO;
 import org.oops.api.coin.dto.CoinFindByNameDTO;
+import org.oops.api.coin.dto.CoinUpdateDTO;
 import org.oops.api.coin.dto.CreateCoinDTO;
 
 import java.util.List;
@@ -47,4 +48,8 @@ public interface CoinService {
      */
     List<CreateCoinDTO> addCoinsToDatabase(List<CreateCoinDTO> coinInfoArray);
 
+    /**
+     * 코인 정보 수정
+     */
+    boolean updateCoinInfo(List<CoinUpdateDTO> coinUpdateList);
 }

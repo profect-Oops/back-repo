@@ -10,7 +10,7 @@ import java.util.List;
 public interface AlertRepository extends JpaRepository<Alert, Long> {
 
     //내 알림 조회
-    @EntityGraph(attributePaths = {"coin"})  // coin 객체를 함께 로딩
+    @EntityGraph(attributePaths = {"static/coin"})  // coin 객체를 함께 로딩
     List<Alert> findByUserId_UserId(Long userId);
 
     //내 알림 개수 조회

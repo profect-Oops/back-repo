@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.oops.api.coin.dto.CoinDTO;
 import org.oops.api.coin.dto.CoinFindByNameDTO;
+import org.oops.api.coin.dto.CoinUpdateDTO;
 import org.oops.api.coin.dto.CreateCoinDTO;
 import org.oops.domain.coin.Coin;
 import org.oops.domain.coin.CoinRepository;
@@ -103,5 +104,23 @@ public class CoinServiceImpl implements CoinService {
         }
 
         return savedCoins;
+    }
+
+    //코인 수정
+    @Transactional
+    public boolean updateCoinInfo(List<CoinUpdateDTO> coinUpdateList){
+        boolean isUpdated = false;
+
+        for (CoinUpdateDTO coinUpdate : coinUpdateList) {
+            Optional<Coin> existingCoin = coinRepository.findByTicker(coinUpdate.getTicker());
+
+            if (existingCoin.isPresent()) {
+                Coin coin = existingCoin.get();
+                coin.update(coinUpdate.getName(), coinUpdate.getPicture());
+                coinRepository.save(coin);
+                isUpdated = true;
+            }
+        }
+        return isUpdated;
     }
 }

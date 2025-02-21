@@ -34,7 +34,7 @@ public class Coin {
     @Column(name = "TICKER")
     private String ticker;
 
-    @Column(name = "GPT_DATA", nullable = false)
+    @Column(name = "GPT_DATA")
     private String gptData;
 
     @Builder
@@ -61,6 +61,12 @@ public class Coin {
                 .ticker(ticker)
                 .gptData(gptData)
                 .build();
+    }
+
+    // 코인 정보 업데이트 메서드 추가
+    public void update(String name, String coinPicture) {
+        this.name = name;
+        this.picture = coinPicture;
     }
 
 
