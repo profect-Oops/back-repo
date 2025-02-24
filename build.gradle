@@ -2,13 +2,74 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.0'
     id 'io.spring.dependency-management' version '1.1.5'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.12.2'
+    id 'maven-publish'
 }
 
 group = 'org.oops'
 version = '1.0-SNAPSHOT'
 
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+}
+
 repositories {
     mavenCentral()
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+    ignoreFailures = true
+}
+jacocoTestReport {
+    reports {
+        dependsOn test
+        reports {
+            html.required = true
+            xml.required = true
+        }
+
+        // QueryDSL QDomain 제외시키기
+        def QDomains = []
+
+        for (qPattern in '**/QA'..'**/QZ') {
+            QDomains.add(qPattern + '*')
+        }
+        afterEvaluate {
+            classDirectories.setFrom(
+                    // 그 외의 매칭되는 클래스도 제외 대상
+                    files(classDirectories.files.collect {
+                        fileTree(dir: it, excludes: [
+                                "org.oops.domain.**.**",
+                                "package org.oops/common",
+                                "**/*Application*",
+                                "**/*Config*",
+                                "**/*Dto*",
+                                "**/*DTO*",
+                                "**/*Request*",
+                                "**/*Response*",
+                                "**/*Interceptor*",
+                                "**/*Exception*"
+                        ] + QDomains)
+                    })
+            )
+        }
+    }
+}
+coveralls {
+    jacocoReportPath 'build/customJacocoReportDir/test/jacocoTestReport.xml'
 }
 
 dependencies {
@@ -49,8 +110,29 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    //test 라이브러리
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    // JUnit 5 dependencies
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.0'
+    // AssertJ
+    testImplementation 'org.assertj:assertj-core:3.22.0'
+    // Mockito
+    testImplementation 'org.mockito:mockito-core:4.4.0'
 }
 
-test {
+tasks.named('test') {
+    outputs.dir snippetsDir
     useJUnitPlatform()
+
+    finalizedBy jacocoTestReport
+
+}
+
+tasks.named('asciidoctor') {
+    inputs.dir snippetsDir
+    dependsOn test
 }
