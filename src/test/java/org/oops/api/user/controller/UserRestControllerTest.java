@@ -66,6 +66,7 @@ class UserRestControllerTest {
 
     @Test
     @WithMockUser(username = "user1", roles = {"USER"})
+    @DisplayName("사용자 정보 수정 테스트")
     void update() throws Exception {
 
         ObjectMapper objectMapper = new ObjectMapper();
