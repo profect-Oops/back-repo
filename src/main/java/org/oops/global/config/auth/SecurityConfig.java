@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers().hasRole(Role.USER.name())
                         .requestMatchers("/", "/login", "/static/login.html", "/css/**", "images/**", "/static/js/**", "/static/js/**", "/logout/*", "/api/coin/**", "/api/coin/add", "/api/coin/details","/api/news/**", "/static/index.html", "/static/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
-                        .requestMatchers("/ws/**", "/api/coin/details/**", "/static/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
+                        .requestMatchers("/ws/**", "/ws","/api/coin/details/**", "/static/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
                         .requestMatchers("/api/**","/oauth2/**", "/login/oauth2/**").permitAll()  //추가!
                         .anyRequest().authenticated()
                 )
@@ -98,7 +98,8 @@ public class SecurityConfig {
                 "http://localhost:5500",
                 "http://localhost:8080",
                 "https://d3pdkkr961vb7.cloudfront.net",
-                "https://todaycoinfo.com"
+                "https://todaycoinfo.com",
+                "https://api.todaycoinfo.com"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
