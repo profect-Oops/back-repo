@@ -8,7 +8,6 @@ HELP.md
 !**/src/test/**/build/
 
 # Build 파일 무시
-/build/
 *.jar
 
 ### STS ###
