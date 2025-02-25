@@ -136,3 +136,7 @@ tasks.named('asciidoctor') {
     inputs.dir snippetsDir
     dependsOn test
 }
+
+bootJar {
+    mainClass = 'org.oops.Main'
+}
