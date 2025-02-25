@@ -8,7 +8,7 @@ HELP.md
 !**/src/test/**/build/
 
 # Build 파일 무시
-*.jar
+oops-1.0-SNAPSHOT.jar
 
 ### STS ###
 .apt_generated
