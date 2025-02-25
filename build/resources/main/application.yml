@@ -32,3 +32,7 @@ server:
       - "https://d3pdkkr961vb7.cloudfront.net"
       - "https://todaycoinfo.com"
       - "https://api.todaycoinfo.com"
+---
+spring:
+  websocket:
+    enabled: true
