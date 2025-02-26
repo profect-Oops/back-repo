@@ -35,14 +35,16 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // iframe 허용
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers().hasRole(Role.USER.name())
-                        .requestMatchers("/", "/login", "/static/login.html", "/css/**", "images/**", "/static/js/**","/api/coin/**", "/api/news/**", "/static/index.html", "/static/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
-                        .requestMatchers("/ws/**", "/ws","/api/coin/details/**", "/static/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
-                        .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()  //추가! "/api/**" 제거
+//                        .requestMatchers("/", "/login", "/static/login.html", "/css/**", "images/**", "/static/js/**","/api/coin/**", "/api/news/**", "/static/index.html", "/static/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
+//                        .requestMatchers("/ws/**", "/ws","/api/coin/details/**", "/static/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
+//                        .requestMatchers("/api/**","/oauth2/**", "/login/oauth2/**").permitAll()  //추가!
+                        .requestMatchers("/**").permitAll()  // 모든 요청 허용
                         // 인증이 반드시 필요한 API
                         //.requestMatchers("/alert/read", "/api/alert/**").authenticated()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션 유지
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션 유지
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 없이 운영
                 .logout(logoutConfig -> logoutConfig
                         .invalidateHttpSession(true) // 세션 무효화
                         .deleteCookies("JSESSIONID") // JSESSIONID 쿠키 삭제
