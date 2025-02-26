@@ -9,7 +9,7 @@ spring:
 spring:
   datasource:
     #url: jdbc:mysql://localhost:3306/oops #로컬 mysql
-    url: jdbc:mysql://10.0.3.247:3306/oops   #docker container mysql
+    url: jdbc:mysql://10.0.3.37:3306/oops   #docker container mysql
     #username: root
     #password: mysql
     username: backend_user
@@ -22,7 +22,7 @@ spring:
   data:
     redis:
       #host: redis  # 로컬 Docker 네트워크 내 컨테이너 이름 사용
-      host: 10.0.6.125   # 레디스 서버 분리
+      host: 10.0.6.114   # 레디스 서버 분리
       port: 6379
 ---
 server:
