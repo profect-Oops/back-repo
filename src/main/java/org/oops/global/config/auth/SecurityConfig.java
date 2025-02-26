@@ -35,9 +35,9 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // iframe 허용
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers().hasRole(Role.USER.name())
-                        .requestMatchers("/", "/login", "/static/login.html", "/css/**", "images/**", "/static/js/**", "/static/js/**", "/logout/*", "/api/coin/**", "/api/coin/add", "/api/coin/details/**","/api/news/**", "/static/index.html", "/static/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
+                        .requestMatchers("/", "/login", "/static/login.html", "/css/**", "images/**", "/static/js/**","/api/coin/**", "/api/news/**", "/static/index.html", "/static/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
                         .requestMatchers("/ws/**", "/ws","/api/coin/details/**", "/static/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
-                        .requestMatchers("/api/**","/oauth2/**", "/login/oauth2/**").permitAll()  //추가!
+                        .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()  //추가! "/api/**" 제거
                         // 인증이 반드시 필요한 API
                         //.requestMatchers("/alert/read", "/api/alert/**").authenticated()
                         .anyRequest().authenticated()
@@ -95,7 +95,6 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5500",
                 "http://localhost:8080",
