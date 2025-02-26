@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -31,7 +32,7 @@ public class SecurityConfig {
         log.info("Google Client Secret: {}", System.getenv("GOOGLE_CLIENT_SECRET"));
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
-                .csrf(csrf -> csrf.disable()) // CSRF 비활성화
+                .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // iframe 허용
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers().hasRole(Role.USER.name())
@@ -102,7 +103,9 @@ public class SecurityConfig {
                 "http://localhost:8080",
                 "https://d3pdkkr961vb7.cloudfront.net",
                 "https://todaycoinfo.com",
-                "https://api.todaycoinfo.com"
+                "https://api.todaycoinfo.com",
+                "http://todaycoinfo.com",
+                "http://api.todaycoinfo.com"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
