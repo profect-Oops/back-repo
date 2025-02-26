@@ -28,24 +28,14 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, OAuth2AuthorizedClientService authorizedClientService) throws Exception {
-        log.info("Google Client ID: {}", System.getenv("GOOGLE_CLIENT_ID"));
-        log.info("Google Client Secret: {}", System.getenv("GOOGLE_CLIENT_SECRET"));
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
-                .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
-                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // iframe 허용
-                .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
-                        //.requestMatchers().hasRole(Role.USER.name())
-//                        .requestMatchers("/", "/login", "/static/login.html", "/css/**", "images/**", "/static/js/**","/api/coin/**", "/api/news/**", "/static/index.html", "/static/coin/coinDetail.html").permitAll()  //인증없어도 접근 가능
-//                        .requestMatchers("/ws/**", "/ws","/api/coin/details/**", "/static/coin/coinDetail.html/**").permitAll() // WebSocket 및 API 허용
-//                        .requestMatchers("/api/**","/oauth2/**", "/login/oauth2/**").permitAll()  //추가!
-                        .requestMatchers("/**").permitAll()  // 모든 요청 허용
-                        // 인증이 반드시 필요한 API
-                        //.requestMatchers("/alert/read", "/api/alert/**").authenticated()
-                        .anyRequest().permitAll()
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/**", "/api/news/**", "/ws/**").permitAll()
+                        .anyRequest().authenticated()
                 )
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션 유지
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 없이 운영
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .logout(logoutConfig -> logoutConfig
                         .invalidateHttpSession(true) // 세션 무효화
                         .deleteCookies("JSESSIONID") // JSESSIONID 쿠키 삭제
@@ -99,22 +89,16 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:5500",
-                "http://localhost:8080",
-                "https://d3pdkkr961vb7.cloudfront.net",
                 "https://todaycoinfo.com",
-                "https://api.todaycoinfo.com",
-                "http://todaycoinfo.com",
-                "http://api.todaycoinfo.com"
+                "https://api.todaycoinfo.com"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setExposedHeaders(List.of("Authorization")); // 클라이언트에서 사용 가능하도록 추가
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-        source.registerCorsConfiguration("/oauth2/**", configuration);  // OAuth2 CORS 허용
-        source.registerCorsConfiguration("/login/oauth2/**", configuration);  // OAuth2 로그인 리디렉션 허용
         return source;
     }
 
