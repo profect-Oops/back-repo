@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,8 +41,11 @@ public class CoinRestController extends BaseController {
     //코인 이름으로 코인 디테일 정보 확인
     @GetMapping("/details/{name}")
     public ResponseEntity<?> getCoinDetails(@PathVariable String name) {
+        String decodedName = URLDecoder.decode(name, StandardCharsets.UTF_8); // ✅ 한글 URL 디코딩
+        CoinDTO coin = coinService.findCoinByCoinName(decodedName);
+
         // 코인 정보를 name으로 조회
-        CoinDTO coin = coinService.findCoinByCoinName(name);
+        //CoinDTO coin = coinService.findCoinByCoinName(name);
 
         if (coin == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("코인을 찾을 수 없습니다.");
