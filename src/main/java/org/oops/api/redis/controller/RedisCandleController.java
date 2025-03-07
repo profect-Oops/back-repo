@@ -18,7 +18,7 @@ public class RedisCandleController {
         this.redisCandleService = redisCandleService;
     }
 
-    // ✅ 특정 마켓의 과거 캔들 데이터 조회 (캐싱 포함)
+    // 특정 마켓의 과거 캔들 데이터 조회 (캐싱 포함)
     @GetMapping("/{market}")
     public List<CoinCandleDTO> getHistoricalCandles(@PathVariable String market, @RequestParam(value = "to", required = false) String to) {
         return redisCandleService.getHistoricalCandles(market, to);

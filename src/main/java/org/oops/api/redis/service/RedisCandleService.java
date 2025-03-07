@@ -43,7 +43,7 @@ public class RedisCandleService {
         // 캐시가 없으면 Upbit API 호출
         String url = "https://api.upbit.com/v1/candles/minutes/1?market=" + market + "&count=60";
         if (to != null) {
-            url += "&to=" + to;  // ✅ `to` 값을 API 요청에 포함
+            url += "&to=" + to;  // `to` 값을 API 요청에 포함
         }
 
         logger.info("📡 외부 API 요청: {}", url);

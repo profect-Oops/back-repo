@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.oops.domain.alert.Alert;
 
 //데이터 전송
 @Service
@@ -24,7 +25,7 @@ public class WebSocketDataService {
     }
 
 
-    // ✅ 특정 마켓의 가격 업데이트 전송
+    // 특정 마켓의 가격 업데이트 전송
     public void sendPriceDetailUpdate(CoinPriceDTO price) {
         if (price == null || price.getCode() == null) {
             logger.warn("⛔ [WebSocketDataService] 유효하지 않은 가격 데이터");
@@ -35,7 +36,7 @@ public class WebSocketDataService {
         messagingTemplate.convertAndSend(destination, price);
     }
 
-    // ✅캔들 업데이트 전송
+    // 캔들 업데이트 전송
     public void sendCandleUpdate(CoinCandleDTO candle) {
         if (candle == null || candle.getCode() == null) {
             logger.warn("⛔ [WebSocketDataService] 유효하지 않은 캔들 데이터");

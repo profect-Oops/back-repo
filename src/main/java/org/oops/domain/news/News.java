@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.oops.domain.coin.Coin;
+import org.oops.domain.newscoinrelation.NewsCoinRelation;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -42,28 +44,25 @@ public class News {
     @Column(name = "UPLOADTIME")
     private LocalDateTime uploadTime;
 
-    @ManyToOne
-    @JoinColumn(name = "COIN_ID")
-    private Coin coinId;
+    @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<NewsCoinRelation> newsCoinRelation;
 
     @Builder
-    public News(String title, String content, String newspaper, String source, LocalDateTime uploadTime,Coin coinId) {
+    public News(String title, String content, String newspaper, String source, LocalDateTime uploadTime) {
         this.title = title;
         this.content = content;
         this.newspaper = newspaper;
         this.source = source;
         this.uploadTime = uploadTime;
-        this.coinId = coinId;
     }
 
-    public static final News fromDTO(final String title, final String content, final String newspaper, final String source, final LocalDateTime uploadTime, final Coin coinId) {
+    public static final News fromDTO(final String title, final String content, final String newspaper, final String source, final LocalDateTime uploadTime) {
         return News.builder()
                 .title(title)
                 .content(content)
                 .newspaper(newspaper)
                 .source(source)
                 .uploadTime(uploadTime)
-                .coinId(coinId)
                 .build();
     }
 }

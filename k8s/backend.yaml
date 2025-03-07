@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ip-10-0-4-101  # 정확한 hostname 값으로 수정
+      containers:
+        - name: backend
+          image: mybackend:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: REDIS_HOST
+              value: "redis-service"
+            - name: DB_HOST
+              value: "oops-mysql-db.cjw2u00m0szc.ap-northeast-2.rds.amazonaws.com"

@@ -1,5 +1,6 @@
 package org.oops.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicUpdate
+@JsonIgnoreProperties(ignoreUnknown = true)  // roleKey 같은 불필요한 필드를 무시
 @Table(name = "user")
 public class User {
 

@@ -5,6 +5,7 @@ import jakarta.annotation.PostConstruct;
 import okhttp3.*;
 import org.oops.api.coin.dto.CoinCandleDTO;
 import org.oops.api.coin.dto.CoinPriceDTO;
+import org.oops.api.coin.service.CoinPriceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,18 @@ public class UpbitWebSocketClient {
     private final Consumer<CoinPriceDTO> priceHandler;
     private final Consumer<CoinCandleDTO> candleHandler;
     private final Consumer<CoinPriceDTO> priceDetailHandler;
+    private final CoinPriceService coinPriceService;
+
     private WebSocket webSocket;
     private boolean shouldReconnect = true;
 
     @Autowired
-    public UpbitWebSocketClient(Consumer<CoinPriceDTO> priceHandler, Consumer<CoinPriceDTO> priceDetailHandler, Consumer<CoinCandleDTO> candleHandler) {
+    public UpbitWebSocketClient(Consumer<CoinPriceDTO> priceHandler, Consumer<CoinPriceDTO> priceDetailHandler, Consumer<CoinCandleDTO> candleHandler, CoinPriceService coinPriceService) {
         this.client = new OkHttpClient();
         this.priceDetailHandler = priceDetailHandler;
         this.priceHandler = priceHandler;
         this.candleHandler = candleHandler;
+        this.coinPriceService = coinPriceService;
     }
 
     @PostConstruct
@@ -44,7 +48,7 @@ public class UpbitWebSocketClient {
                 .url(WEBSOCKET_URL)
                 .build();
 
-        webSocket = client.newWebSocket(request, new UpbitWebSocketListener(priceHandler, candleHandler, priceDetailHandler) {
+        webSocket = client.newWebSocket(request, new UpbitWebSocketListener(priceHandler, candleHandler, priceDetailHandler, coinPriceService) {
             @Override
             public void onClosed(WebSocket webSocket, int code, String reason) {
                 super.onClosed(webSocket, code, reason);

@@ -11,10 +11,11 @@ import org.oops.domain.user.User;
 
 import java.math.BigDecimal;
 
-@Entity
+
 @Getter
 @DynamicUpdate
 @NoArgsConstructor
+@Entity
 @Table(name = "ALERT")
 public class Alert {
 
@@ -47,8 +48,11 @@ public class Alert {
     @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "ALERTCONDITION")
+    private String alertCondition;
+
     @Builder
-    public Alert(BigDecimal alertPrice, Boolean alertActive, Coin coin, User userId, String coinName, String coinTicker, String email) {
+    public Alert(BigDecimal alertPrice, Boolean alertActive, Coin coin, User userId, String coinName, String coinTicker, String email, String alertCondition) {
         this.alertPrice = alertPrice;
         this.alertActive = alertActive;
         this.coin = coin;
@@ -56,9 +60,10 @@ public class Alert {
         this.coinName = coinName;
         this.coinTicker = coinTicker;
         this.email = email;
+        this.alertCondition = alertCondition;
     }
 
-    public static final Alert fromDTO(final BigDecimal alertPrice, final Boolean alertActive, final Coin coin, final User userId, final String coinName, final String coinTicker, final String email) {
+    public static final Alert fromDTO(final BigDecimal alertPrice, final Boolean alertActive, final Coin coin, final User userId, final String coinName, final String coinTicker, final String email, final String alertCondition) {
         return Alert.builder()
                 .alertPrice(alertPrice)
                 .alertActive(alertActive)
@@ -67,6 +72,7 @@ public class Alert {
                 .coinName(coinName)
                 .coinTicker(coinTicker)
                 .email(email)
+                .alertCondition(alertCondition)
                 .build();
     }
 
@@ -77,5 +83,7 @@ public class Alert {
     public void updateAlertPrice(BigDecimal alertPrice) {
         this.alertPrice = alertPrice;
     }
+
+    public void updateCondition(String alertCondition){ this.alertCondition = alertCondition; }
 }
 

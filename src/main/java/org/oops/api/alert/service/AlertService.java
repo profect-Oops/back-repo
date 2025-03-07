@@ -50,6 +50,15 @@ public interface AlertService {
     void updateAlertStatus(Long alertId, Boolean alertActive);
 
     /**
+     * 알림 조건 업데이트
+     *
+     * @param알림 ID, 알림 조건
+     *
+     */
+    void updateAlertCondition(Long alertId, String alertCondition);
+
+
+    /**
      * 알림 수정 - alertPrice 수정
      *
      * @param알림 ID, price

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.function.Consumer;
 
 //데이터 전송
-@Configuration  // ✅ Spring이 관리하는 Bean 등록
+@Configuration  // Spring이 관리하는 Bean 등록
 public class WebSocketDataHandler {
     private final WebSocketDataService webSocketDataService;
 
@@ -21,13 +21,13 @@ public class WebSocketDataHandler {
         return webSocketDataService::sendPriceUpdate;
     }
 
-    // ✅ 특정 마켓 가격 데이터를 처리하는 핸들러 (새로 추가됨)
+    // 특정 마켓 가격 데이터를 처리하는 핸들러
     @Bean
     public Consumer<CoinPriceDTO> priceDetailHandler() {
         return webSocketDataService::sendPriceDetailUpdate;
     }
 
-    // ✅ 캔들 데이터를 요청하는 핸들러 추가
+    // 캔들 데이터를 요청하는 핸들러 추가
     @Bean
     public Consumer<CoinCandleDTO> candleDetailHandler() {
         return webSocketDataService::sendCandleUpdate;

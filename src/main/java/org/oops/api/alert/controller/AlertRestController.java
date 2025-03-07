@@ -1,12 +1,10 @@
 package org.oops.api.alert.controller;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.oops.api.alert.dto.CreateAlertDTO;
 import org.oops.api.alert.dto.GetAlertResponseDTO;
-import org.oops.api.alert.dto.UpdateAlertDTO;
 import org.oops.api.alert.service.AlertService;
 import org.oops.api.coin.dto.CoinFindByNameDTO;
 import org.oops.api.coin.service.CoinService;
@@ -94,6 +92,20 @@ public class AlertRestController extends BaseController {
 
         // 알림 상태 업데이트 서비스 호출
         alertService.updateAlertStatus(alertId, alertActive);
+
+        return ResponseEntity.ok(ResponseDTO.ok(null));
+    }
+
+    // 알림 조건 수정 -> 부분 업데이트: PATCH
+    @PatchMapping("/update/alertCondition/{alertId}")
+    public ResponseEntity<ResponseDTO<Void>> updateAlertCondition(
+            @PathVariable Long alertId,
+            @RequestBody Map<String, String> requestBody) {
+
+        String alertCondition = requestBody.get("alertCondition");
+
+        // 알림 상태 업데이트 서비스 호출
+        alertService.updateAlertCondition(alertId, alertCondition);
 
         return ResponseEntity.ok(ResponseDTO.ok(null));
     }

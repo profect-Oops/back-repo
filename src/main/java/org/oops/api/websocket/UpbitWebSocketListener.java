@@ -6,6 +6,7 @@ import okhttp3.*;
 import okio.ByteString;
 import org.oops.api.coin.dto.CoinCandleDTO;
 import org.oops.api.coin.dto.CoinPriceDTO;
+import org.oops.api.coin.service.CoinPriceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -22,10 +23,13 @@ class UpbitWebSocketListener extends WebSocketListener {
     private final Consumer<CoinCandleDTO> candleHandler;
     private final Consumer<CoinPriceDTO> priceDetailHandler;
 
-    public UpbitWebSocketListener(Consumer<CoinPriceDTO> priceHandler, Consumer<CoinCandleDTO> candleHandler, Consumer<CoinPriceDTO> priceDetailHandler) {
+    private final CoinPriceService coinPriceService;  //메일 보내기 위해
+
+    public UpbitWebSocketListener(Consumer<CoinPriceDTO> priceHandler, Consumer<CoinCandleDTO> candleHandler, Consumer<CoinPriceDTO> priceDetailHandler, CoinPriceService coinPriceService) {
         this.priceHandler = priceHandler;
         this.candleHandler = candleHandler;
         this.priceDetailHandler = priceDetailHandler;
+        this.coinPriceService = coinPriceService;
     }
 
     @Override
@@ -58,6 +62,9 @@ class UpbitWebSocketListener extends WebSocketListener {
                     CoinPriceDTO price = processTicker(jsonNode);
                     priceHandler.accept(price);
                     priceDetailHandler.accept(price);
+
+                    // WebSocket에서 받은 데이터를 CoinPriceService에 전달
+                    coinPriceService.updateCoinPrice(price.getCode(), price.getPrice());
                 }
             } catch (NullPointerException e) {
                 logger.error("Missing required fields in message: {}", jsonNode.toString(), e);
@@ -82,7 +89,7 @@ class UpbitWebSocketListener extends WebSocketListener {
     private CoinPriceDTO processTicker(JsonNode jsonNode) {
         return new CoinPriceDTO(
                 jsonNode.get("code").asText(),
-                jsonNode.get("opening_price").asDouble(),
+                jsonNode.get("trade_price").asDouble(),
                 jsonNode.get("signed_change_rate").asDouble(),
                 jsonNode.get("acc_trade_price_24h").asDouble()
         );

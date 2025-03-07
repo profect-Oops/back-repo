@@ -1,17 +1,16 @@
 package org.oops.api.coin.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Getter
+@NoArgsConstructor
 public class CoinPriceDTO implements Serializable {
-    private final String code;
-    private final Double price;
-    private final Double changeRate;
-    private final Double acc_trade_price_24h;
+    private String code;
+    private Double price;
+    private Double changeRate;
+    private Double acc_trade_price_24h;
 
     @Builder
     public CoinPriceDTO(String code, Double price, Double changeRate, Double acc_trade_price_24h) {

@@ -1,21 +1,21 @@
-services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: mysql
-      MYSQL_DATABASE: oops
-    ports:
-      - "3306:3306"
-    networks:
-      - app-net
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-
+#services:
+#  mysql:
+#    image: mysql:8.0
+#    container_name: mysql-db
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_PASSWORD: mysql
+#      MYSQL_DATABASE: oops
+#    ports:
+#      - "3306:3306"
+#    networks:
+#      - app-net
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+#      interval: 10s
+#      retries: 5
+#      start_period: 30s
+#
 #  redis:
 #    image: redis:latest
 #    container_name: redis
@@ -24,28 +24,28 @@ services:
 #      - app-net
 #    ports:
 #      - "6379:6379"
-
-  spring_app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: spring_container
-    restart: always
-    depends_on:
-      mysql:
-        condition: service_healthy  # MySQL이 완전히 실행될 때까지 기다림
-    networks:
-      - app-net
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/oops
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: mysql
-      #SPRING_REDIS_HOST: redis  #로컬
-      SPRING_REDIS_HOST: 10.0.6.40  #추가
-      SPRING_REDIS_PORT: 6379   #추가
-    ports:
-      - "8080:8080"
-
-networks:
-  app-net:
-    driver: bridge
+#
+#  spring_app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: spring_container
+#    restart: always
+#    depends_on:
+#      mysql:
+#        condition: service_healthy  # MySQL이 완전히 실행될 때까지 기다림
+#    networks:
+#      - app-net
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/oops
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: mysql
+#      #SPRING_REDIS_HOST: redis  #로컬
+#      SPRING_REDIS_HOST: 10.0.6.40  #추가
+#      SPRING_REDIS_PORT: 6379   #추가
+#    ports:
+#      - "8080:8080"
+#
+#networks:
+#  app-net:
+#    driver: bridge

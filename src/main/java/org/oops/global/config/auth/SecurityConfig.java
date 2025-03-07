@@ -27,14 +27,16 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, OAuth2AuthorizedClientService authorizedClientService) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 에러 방지
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**", "/api/news/**", "/ws/**").permitAll()
+                        .requestMatchers("/api/coin/**", "/api/news/**","/api/user/**", "/api/redis/**", "/ws/**","/cache").permitAll()
                         .requestMatchers("/login/oauth2/**", "/oauth2/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/","/index.html", "/static/index.html", "/coin/coinDetail.html","/static/coin/coinDetail.html").permitAll()
+                        .requestMatchers("/alert/alarm.html","/static/alert/alarm.html").authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .logout(logoutConfig -> logoutConfig
@@ -47,7 +49,8 @@ public class SecurityConfig {
                 // OAuth2 로그인 기능에 대한 여러 설정
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/static/alert/alarm.html", false)  // false로 하면 기존 요청을 유지하면서 리다이렉트하지 않아서 세션 유지됨
+                        //.defaultSuccessUrl("/static/alert/alarm.html", false)  // false로 하면 기존 요청을 유지하면서 리다이렉트하지 않아서 세션 유지됨
+                        .defaultSuccessUrl("/alert/alarm.html", false)  // false로 하면 기존 요청을 유지하면서 리다이렉트하지 않아서 세션 유지됨
                         .failureHandler((request, response, exception) -> {
                             log.info("Google Client ID: {}", System.getenv("GOOGLE_CLIENT_ID"));
                             log.info("Google Client Secret: {}", System.getenv("GOOGLE_CLIENT_SECRET"));
@@ -74,12 +77,12 @@ public class SecurityConfig {
 
                             // 로그인 성공 로그
                             log.info("로그인 성공! 이메일: {}", email);
-                            log.info("Google Client ID: {}", System.getenv("GOOGLE_CLIENT_ID"));
-                            log.info("Google Client Secret: {}", System.getenv("GOOGLE_CLIENT_SECRET"));
-                            request.getSession().setAttribute("email", email);
+//                            log.info("Google Client ID: {}", System.getenv("GOOGLE_CLIENT_ID"));
+//                            log.info("Google Client Secret: {}", System.getenv("GOOGLE_CLIENT_SECRET"));
+//                            request.getSession().setAttribute("email", email);
 
-                            // /index.html 페이지로 리다이렉트
-                            response.sendRedirect("/static/alert/alarm.html");
+                            // /alert/alarm.html 페이지로 리다이렉트
+                            response.sendRedirect("/alert/alarm.html");
                         })
                 );
         return http.build();
@@ -91,7 +94,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
                 "https://todaycoinfo.com",
-                "https://api.todaycoinfo.com"
+                "https://api.todaycoinfo.com",
+                "http://localhost:8080"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);

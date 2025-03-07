@@ -14,6 +14,10 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 
 import java.time.Duration;
 
+/**
+ * 캐싱 기능
+ */
+
 @Configuration
 @EnableCaching
 public class CacheConfig {

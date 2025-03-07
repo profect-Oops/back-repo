@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.oops.api.alert.dto.GetAlertResponseDTO;
 import org.oops.api.alert.service.AlertService;
 import org.oops.api.common.controller.BaseController;
-import org.oops.domain.alert.Alert;
 import org.oops.global.config.auth.dto.SessionUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
