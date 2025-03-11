@@ -15,14 +15,62 @@ spec:
         app: backend
     spec:
       nodeSelector:
-        kubernetes.io/hostname: ip-10-0-4-101  # 정확한 hostname 값으로 수정
+        kubernetes.io/hostname: ip-10-0-4-101
+      imagePullSecrets:
+        - name: ecr-secret
       containers:
         - name: backend
-          image: mybackend:latest
+          image: 941377153895.dkr.ecr.ap-northeast-2.amazonaws.com/oops/backend:latest
           ports:
             - containerPort: 8080
           env:
             - name: REDIS_HOST
               value: "redis-service"
-            - name: DB_HOST
-              value: "oops-mysql-db.cjw2u00m0szc.ap-northeast-2.rds.amazonaws.com"
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secret
+                  key: GOOGLE_CLIENT_ID
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secret
+                  key: GOOGLE_CLIENT_SECRET
+            - name: GOOGLE_EMAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secret
+                  key: GOOGLE_EMAIL_USERNAME
+            - name: GOOGLE_EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secret
+                  key: GOOGLE_EMAIL_PASSWORD
+            - name: RDS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secret
+                  key: RDS_HOST
+            - name: RDS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secret
+                  key: RDS_USERNAME
+            - name: RDS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secret
+                  key: RDS_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP

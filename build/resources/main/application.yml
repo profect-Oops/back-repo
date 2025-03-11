@@ -8,21 +8,24 @@ spring:
 ---
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/oops #로컬 mysql
+    #url: jdbc:mysql://localhost:3306/oops #로컬 mysql
     #url: jdbc:mysql://10.0.3.37:3306/oops   #docker container mysql
-    username: root
-    password: mysql
-    #username: backend_user
-    #password: secure_password
+    url: jdbc:mysql://oops-mysql-db.cjw2u00m0szc.ap-northeast-2.rds.amazonaws.com:3306/oops?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+    #username: root
+    #password: mysql
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: create
     show-sql: true
   data:
     redis:
-      host: localhost  # 로컬 Docker 네트워크 내 컨테이너 이름 사용
+      #host: localhost  # 로컬 Docker 네트워크 내 컨테이너 이름 사용
       #host: 10.0.6.114   # 레디스 서버 분리
+      host: redis-service  # 쿠버네티스
       port: 6379
 ---
 server:

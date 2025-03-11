@@ -11,14 +11,14 @@ import org.springframework.stereotype.Component;
 public class EnvConfig {
 
     @PostConstruct
-    public void loadEnvVariables() {
-        Dotenv dotenv = Dotenv.load();
-        System.setProperty("GOOGLE_CLIENT_ID", dotenv.get("GOOGLE_CLIENT_ID"));
-        System.setProperty("GOOGLE_CLIENT_SECRET", dotenv.get("GOOGLE_CLIENT_SECRET"));
-        System.setProperty("GOOGLE_EMAIL_USERNAME", dotenv.get("GOOGLE_EMAIL_USERNAME"));
-        System.setProperty("GOOGLE_EMAIL_PASSWORD", dotenv.get("GOOGLE_EMAIL_PASSWORD"));
-        System.setProperty("RDS_HOST", dotenv.get("RDS_HOST"));
-        System.setProperty("RDS_USERNAME", dotenv.get("RDS_USERNAME"));
-        System.setProperty("RDS_PASSWORD", dotenv.get("RDS_PASSWORD"));
+    public void checkEnvVariables() {
+        System.out.println("🔍 Checking environment variables:");
+        System.out.println("GOOGLE_CLIENT_ID = " + System.getenv("GOOGLE_CLIENT_ID"));
+        System.out.println("GOOGLE_CLIENT_SECRET = " + System.getenv("GOOGLE_CLIENT_SECRET"));
+        System.out.println("GOOGLE_EMAIL_USERNAME = " + System.getenv("GOOGLE_EMAIL_USERNAME"));
+        System.out.println("GOOGLE_EMAIL_PASSWORD = " + System.getenv("GOOGLE_EMAIL_PASSWORD"));
+        System.out.println("RDS_HOST = " + System.getenv("RDS_HOST"));
+        System.out.println("RDS_USERNAME = " + System.getenv("RDS_USERNAME"));
+        System.out.println("RDS_PASSWORD = " + System.getenv("RDS_PASSWORD"));
     }
 }
