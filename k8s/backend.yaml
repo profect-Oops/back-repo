@@ -15,7 +15,7 @@ spec:
         app: backend
     spec:
       nodeSelector:
-        kubernetes.io/hostname: ip-10-0-4-101
+        kubernetes.io/hostname: worker-node-1
       imagePullSecrets:
         - name: ecr-secret
       containers:
