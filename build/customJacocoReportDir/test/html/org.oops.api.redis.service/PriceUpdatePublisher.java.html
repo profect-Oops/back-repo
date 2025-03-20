@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PriceUpdatePublisher.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">oops</a> &gt; <a href="index.source.html" class="el_package">org.oops.api.redis.service</a> &gt; <span class="el_source">PriceUpdatePublisher.java</span></div><h1>PriceUpdatePublisher.java</h1><pre class="source lang-java linenums">package org.oops.api.redis.service;
+
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.oops.api.coin.dto.CoinPriceDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PriceUpdatePublisher {
+<span class="nc" id="L14">    private static final Logger logger = LoggerFactory.getLogger(PriceUpdatePublisher.class);</span>
+    private final RedisTemplate&lt;String, String&gt; redisStringTemplate;
+    private final ChannelTopic priceUpdateTopic;
+<span class="nc" id="L17">    private final ObjectMapper objectMapper = new ObjectMapper();</span>
+
+<span class="nc" id="L19">    public PriceUpdatePublisher(RedisTemplate&lt;String, String&gt; redisStringTemplate, ChannelTopic priceUpdateTopic) {</span>
+<span class="nc" id="L20">        this.redisStringTemplate = redisStringTemplate;</span>
+<span class="nc" id="L21">        this.priceUpdateTopic = priceUpdateTopic;</span>
+<span class="nc" id="L22">    }</span>
+
+    public void publishPriceUpdate(CoinPriceDTO priceDTO) {
+        try {
+<span class="nc" id="L26">            String message = objectMapper.writeValueAsString(priceDTO);</span>
+<span class="nc" id="L27">            redisStringTemplate.convertAndSend(priceUpdateTopic.getTopic(), message);</span>
+<span class="nc" id="L28">        } catch (Exception e) {</span>
+<span class="nc" id="L29">            logger.error(&quot;Redis Pub/Sub 메시지 전송 실패&quot;, e);</span>
+<span class="nc" id="L30">        }</span>
+<span class="nc" id="L31">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

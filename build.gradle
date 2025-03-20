@@ -52,8 +52,9 @@ jacocoTestReport {
                     // 그 외의 매칭되는 클래스도 제외 대상
                     files(classDirectories.files.collect {
                         fileTree(dir: it, excludes: [
-                                "org.oops.domain.**.**",
-                                "package org.oops/common",
+                                "org/oops/domain/**",
+                                "org/oops/global/**",
+                                "org/oops/api/common/**",
                                 "**/*Application*",
                                 "**/*Config*",
                                 "**/*Dto*",
@@ -61,7 +62,8 @@ jacocoTestReport {
                                 "**/*Request*",
                                 "**/*Response*",
                                 "**/*Interceptor*",
-                                "**/*Exception*"
+                                "**/*Exception*",
+                                "org/oops/api/websocket/WebSocketDataHandler"
                         ] + QDomains)
                     })
             )
@@ -125,6 +127,7 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.22.0'
     // Mockito
     testImplementation 'org.mockito:mockito-core:4.4.0'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.0'
 }
 
 tasks.named('test') {

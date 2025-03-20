@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.oops.api.redis.service.PriceUpdateSubscriberTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-03-20T02:11:02" hostname="imyeongjin-ui-MacBookAir.local" time="0.629">
+  <properties/>
+  <testcase name="onMessage_PriceBelowThreshold_EmailSent()" classname="org.oops.api.redis.service.PriceUpdateSubscriberTest" time="0.629"/>
+  <system-out><![CDATA[11:11:03.438 [Test worker] INFO org.oops.api.redis.service.PriceUpdateSubscriber -- DB에서 알림 조회 후 Redis 캐싱: BTC
+11:11:03.454 [Test worker] INFO org.oops.api.redis.service.PriceUpdateSubscriber -- 알림 조건 충족! 사용자: null, 코인: BTC, 설정 가격: 50000, 현재 가격: 6000.0, 조건: BELOW
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

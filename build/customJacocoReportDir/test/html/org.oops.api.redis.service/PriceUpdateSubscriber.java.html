@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PriceUpdateSubscriber.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">oops</a> &gt; <a href="index.source.html" class="el_package">org.oops.api.redis.service</a> &gt; <span class="el_source">PriceUpdateSubscriber.java</span></div><h1>PriceUpdateSubscriber.java</h1><pre class="source lang-java linenums">package org.oops.api.redis.service;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.oops.api.coin.dto.CoinPriceDTO;
+import org.oops.api.email.service.EmailService;
+import org.oops.domain.alert.Alert;
+import org.oops.domain.alert.AlertRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.connection.Message;
+import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+
+@Service
+public class PriceUpdateSubscriber implements MessageListener {
+<span class="fc" id="L26">    private static final Logger logger = LoggerFactory.getLogger(PriceUpdateSubscriber.class);</span>
+<span class="fc" id="L27">    private final ObjectMapper objectMapper = new ObjectMapper();</span>
+    private final AlertRepository alertRepository;
+    private final EmailService emailService;
+    private final StringRedisTemplate redisTemplate; // Redis 활용해서 중복 메일 발송 방지
+
+    private static final long ALERT_TTL = 5; // 알림 유지 시간 (5분)
+    private static final long ALERT_CACHE_TTL = 5;  // DB 조회 캐싱 TTL (5분)
+
+<span class="fc" id="L35">    public PriceUpdateSubscriber(AlertRepository alertRepository, EmailService emailService, StringRedisTemplate redisTemplate) {</span>
+<span class="fc" id="L36">        this.alertRepository = alertRepository;</span>
+<span class="fc" id="L37">        this.emailService = emailService;</span>
+<span class="fc" id="L38">        this.redisTemplate = redisTemplate;</span>
+<span class="fc" id="L39">    }</span>
+
+    @Override
+    public void onMessage(Message message, byte[] pattern) {
+        try {
+<span class="fc" id="L44">            JsonNode jsonNode = objectMapper.readTree(message.getBody());</span>
+<span class="fc" id="L45">            CoinPriceDTO priceDTO = objectMapper.treeToValue(jsonNode, CoinPriceDTO.class);</span>
+
+            // [1] Redis에서 알림 목록 캐싱 확인 (캐시가 있다면 DB 조회 생략)
+<span class="fc" id="L48">            String cacheKey = &quot;alert_list:&quot; + priceDTO.getCode();</span>
+            List&lt;Alert&gt; alerts;
+
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">            if (redisTemplate.hasKey(cacheKey)) {</span>
+<span class="nc" id="L52">                logger.info(&quot;Redis 캐싱된 알림 데이터 사용: {}&quot;, cacheKey);</span>
+<span class="nc" id="L53">                String cachedAlerts = redisTemplate.opsForValue().get(cacheKey);</span>
+<span class="nc" id="L54">                alerts = objectMapper.readValue(cachedAlerts, objectMapper.getTypeFactory().constructCollectionType(List.class, Alert.class));</span>
+<span class="nc" id="L55">            } else {</span>
+                // 캐시가 없을 경우 강제로 새로 불러오기
+<span class="fc" id="L57">                logger.info(&quot;DB에서 알림 조회 후 Redis 캐싱: {}&quot;, priceDTO.getCode());</span>
+<span class="fc" id="L58">                alerts = alertRepository.findByCoinTickerAndAlertActiveTrue(priceDTO.getCode());</span>
+<span class="fc" id="L59">                redisTemplate.opsForValue().set(cacheKey, objectMapper.writeValueAsString(alerts), ALERT_CACHE_TTL, TimeUnit.MINUTES);</span>
+            }
+
+            // [2] 이메일 중복 발송 방지
+<span class="fc bfc" id="L63" title="All 2 branches covered.">            for (Alert alert : alerts) {</span>
+<span class="fc" id="L64">                boolean conditionMet = false;</span>
+
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">                if (&quot;BELOW&quot;.equals(alert.getAlertCondition())) {</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">                    conditionMet = BigDecimal.valueOf(priceDTO.getPrice()).compareTo(alert.getAlertPrice()) &lt;= 0;</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                } else if (&quot;ABOVE&quot;.equals(alert.getAlertCondition())) {</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">                    conditionMet = BigDecimal.valueOf(priceDTO.getPrice()).compareTo(alert.getAlertPrice()) &gt; 0;</span>
+                }
+
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">                if (conditionMet) {</span>
+                    // Redis에서 최근 알림 발송 여부 체크
+<span class="fc" id="L74">                    String redisKey = &quot;alert:&quot; + alert.getUserId() + &quot;:&quot; + alert.getCoinTicker();</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">                    if (redisTemplate.hasKey(redisKey)) {</span>
+<span class="nc" id="L76">                        logger.info(&quot;이미 최근에 알림 발송됨 (5분 이내), 이메일 생략: {}&quot;, redisKey);</span>
+<span class="nc" id="L77">                        continue;</span>
+                    }
+
+<span class="fc" id="L80">                    logger.info(&quot;알림 조건 충족! 사용자: {}, 코인: {}, 설정 가격: {}, 현재 가격: {}, 조건: {}&quot;,</span>
+<span class="fc" id="L81">                            alert.getUserId(), alert.getCoinTicker(), alert.getAlertPrice(), priceDTO.getPrice(), alert.getAlertCondition());</span>
+
+                    // 이메일 제목 및 내용 구성
+<span class="fc" id="L84">                    String subject = &quot;[coinfo] 코인 가격 알림&quot;;</span>
+<span class="fc" id="L85">                    String content = &quot;알림 설정한 코인 : &quot; + alert.getCoinName() + &quot;(&quot; + alert.getCoinTicker() + &quot;)의 가격이 설정 가격&quot; +</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">                            (alert.getAlertCondition().equals(&quot;BELOW&quot;) ? &quot;보다 하락&quot; : &quot;을 초과&quot;) +</span>
+<span class="fc" id="L87">                            &quot;하였습니다. 현재 가격: &quot; + priceDTO.getPrice() + &quot;원&quot;;</span>
+
+                    // 이메일 알림 전송
+<span class="fc" id="L90">                    emailService.sendEmailNotice(alert.getEmail(), subject, content);</span>
+
+                    // [3] Redis에 발송 기록 저장 (5분 TTL)
+<span class="fc" id="L93">                    redisTemplate.opsForValue().set(redisKey, &quot;sent&quot;, ALERT_TTL, TimeUnit.MINUTES);</span>
+
+                    // [4] 알림 비활성화
+<span class="fc" id="L96">                    alert.updateAlertActive(false);</span>
+<span class="fc" id="L97">                    alertRepository.save(alert);</span>
+<span class="fc" id="L98">                    redisTemplate.delete(&quot;alert_list:&quot; + priceDTO.getCode());</span>
+                }
+<span class="fc" id="L100">            }</span>
+<span class="nc" id="L101">        } catch (Exception e) {</span>
+<span class="nc" id="L102">            logger.error(&quot; Redis 메시지 처리 중 오류 발생&quot;, e);</span>
+<span class="fc" id="L103">        }</span>
+<span class="fc" id="L104">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

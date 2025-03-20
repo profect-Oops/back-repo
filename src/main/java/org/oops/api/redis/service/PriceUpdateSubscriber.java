@@ -27,7 +27,7 @@ public class PriceUpdateSubscriber implements MessageListener {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final AlertRepository alertRepository;
     private final EmailService emailService;
-    private final StringRedisTemplate redisTemplate; // Redis 활용해서 중복 메일 발송 발지
+    private final StringRedisTemplate redisTemplate; // Redis 활용해서 중복 메일 발송 방지
 
     private static final long ALERT_TTL = 5; // 알림 유지 시간 (5분)
     private static final long ALERT_CACHE_TTL = 5;  // DB 조회 캐싱 TTL (5분)
@@ -49,12 +49,12 @@ public class PriceUpdateSubscriber implements MessageListener {
             List<Alert> alerts;
 
             if (redisTemplate.hasKey(cacheKey)) {
-                logger.info("⚡ Redis 캐싱된 알림 데이터 사용: {}", cacheKey);
+                logger.info("Redis 캐싱된 알림 데이터 사용: {}", cacheKey);
                 String cachedAlerts = redisTemplate.opsForValue().get(cacheKey);
                 alerts = objectMapper.readValue(cachedAlerts, objectMapper.getTypeFactory().constructCollectionType(List.class, Alert.class));
             } else {
                 // 캐시가 없을 경우 강제로 새로 불러오기
-                logger.info("🛠️ DB에서 알림 조회 후 Redis 캐싱: {}", priceDTO.getCode());
+                logger.info("DB에서 알림 조회 후 Redis 캐싱: {}", priceDTO.getCode());
                 alerts = alertRepository.findByCoinTickerAndAlertActiveTrue(priceDTO.getCode());
                 redisTemplate.opsForValue().set(cacheKey, objectMapper.writeValueAsString(alerts), ALERT_CACHE_TTL, TimeUnit.MINUTES);
             }
@@ -73,11 +73,11 @@ public class PriceUpdateSubscriber implements MessageListener {
                     // Redis에서 최근 알림 발송 여부 체크
                     String redisKey = "alert:" + alert.getUserId() + ":" + alert.getCoinTicker();
                     if (redisTemplate.hasKey(redisKey)) {
-                        logger.info("⚠️ 이미 최근에 알림 발송됨 (5분 이내), 이메일 생략: {}", redisKey);
+                        logger.info("이미 최근에 알림 발송됨 (5분 이내), 이메일 생략: {}", redisKey);
                         continue;
                     }
 
-                    logger.info("🔔 알림 조건 충족! 사용자: {}, 코인: {}, 설정 가격: {}, 현재 가격: {}, 조건: {}",
+                    logger.info("알림 조건 충족! 사용자: {}, 코인: {}, 설정 가격: {}, 현재 가격: {}, 조건: {}",
                             alert.getUserId(), alert.getCoinTicker(), alert.getAlertPrice(), priceDTO.getPrice(), alert.getAlertCondition());
 
                     // 이메일 제목 및 내용 구성
@@ -99,7 +99,7 @@ public class PriceUpdateSubscriber implements MessageListener {
                 }
             }
         } catch (Exception e) {
-            logger.error("❌ Redis 메시지 처리 중 오류 발생", e);
+            logger.error(" Redis 메시지 처리 중 오류 발생", e);
         }
     }
 }

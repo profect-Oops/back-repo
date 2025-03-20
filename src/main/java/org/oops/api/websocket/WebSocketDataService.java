@@ -20,7 +20,7 @@ public class WebSocketDataService {
     }
 
     public void sendPriceUpdate(CoinPriceDTO price) {
-        //logger.info("📤 가격 전체 데이터 전송: {}", price);
+        //logger.info("가격 전체 데이터 전송: {}", price);
         messagingTemplate.convertAndSend("/topic/price", price);
     }
 
@@ -28,11 +28,11 @@ public class WebSocketDataService {
     // 특정 마켓의 가격 업데이트 전송
     public void sendPriceDetailUpdate(CoinPriceDTO price) {
         if (price == null || price.getCode() == null) {
-            logger.warn("⛔ [WebSocketDataService] 유효하지 않은 가격 데이터");
+            logger.warn("[WebSocketDataService] 유효하지 않은 가격 데이터");
             return;
         }
         String destination = "/topic/priceDetail/" + price.getCode();
-        //logger.info("📤 가격 데이터 전송: {} → {}", price, destination);
+        //logger.info("가격 데이터 전송: {} → {}", price, destination);
         messagingTemplate.convertAndSend(destination, price);
     }
 

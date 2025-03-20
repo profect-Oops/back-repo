@@ -25,7 +25,7 @@ spring:
     redis:
       #host: localhost  # 로컬 Docker 네트워크 내 컨테이너 이름 사용
       #host: 10.0.6.114   # 레디스 서버 분리
-      host: redis-service.default.svc.cluster.local  # 쿠버네티스
+      host: redis-service.default.svc.cluster.local  # 쿠버네티스 DNS - default
       port: 6379
 ---
 server:

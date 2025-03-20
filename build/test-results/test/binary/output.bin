@@ -1,0 +1,2 @@
+�11:11:03.438 [Test worker] INFO org.oops.api.redis.service.PriceUpdateSubscriber -- DB에서 알림 조회 후 Redis 캐싱: BTC
+�11:11:03.454 [Test worker] INFO org.oops.api.redis.service.PriceUpdateSubscriber -- 알림 조건 충족! 사용자: null, 코인: BTC, 설정 가격: 50000, 현재 가격: 6000.0, 조건: BELOW

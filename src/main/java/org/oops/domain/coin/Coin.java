@@ -1,5 +1,6 @@
 package org.oops.domain.coin;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +41,7 @@ public class Coin {
     private String gptData;
 
     @OneToMany(mappedBy = "coin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<NewsCoinRelation> newsCoinRelations;
 
     @Builder

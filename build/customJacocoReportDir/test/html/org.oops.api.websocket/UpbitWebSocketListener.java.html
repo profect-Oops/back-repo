@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UpbitWebSocketListener.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">oops</a> &gt; <a href="index.source.html" class="el_package">org.oops.api.websocket</a> &gt; <span class="el_source">UpbitWebSocketListener.java</span></div><h1>UpbitWebSocketListener.java</h1><pre class="source lang-java linenums">package org.oops.api.websocket;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.*;
+import okio.ByteString;
+import org.oops.api.coin.dto.CoinCandleDTO;
+import org.oops.api.coin.dto.CoinPriceDTO;
+import org.oops.api.coin.service.CoinPriceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.function.Consumer;
+
+@Component
+class UpbitWebSocketListener extends WebSocketListener {
+<span class="nc" id="L20">    private static final Logger logger = LoggerFactory.getLogger(UpbitWebSocketListener.class);</span>
+<span class="nc" id="L21">    private static final ObjectMapper objectMapper = new ObjectMapper();</span>
+    private final Consumer&lt;CoinPriceDTO&gt; priceHandler;
+    private final Consumer&lt;CoinCandleDTO&gt; candleHandler;
+    private final Consumer&lt;CoinPriceDTO&gt; priceDetailHandler;
+
+    private final CoinPriceService coinPriceService;  //메일 보내기 위해
+
+<span class="nc" id="L28">    public UpbitWebSocketListener(Consumer&lt;CoinPriceDTO&gt; priceHandler, Consumer&lt;CoinCandleDTO&gt; candleHandler, Consumer&lt;CoinPriceDTO&gt; priceDetailHandler, CoinPriceService coinPriceService) {</span>
+<span class="nc" id="L29">        this.priceHandler = priceHandler;</span>
+<span class="nc" id="L30">        this.candleHandler = candleHandler;</span>
+<span class="nc" id="L31">        this.priceDetailHandler = priceDetailHandler;</span>
+<span class="nc" id="L32">        this.coinPriceService = coinPriceService;</span>
+<span class="nc" id="L33">    }</span>
+
+    @Override
+    public void onOpen(WebSocket webSocket, Response response) {
+<span class="nc" id="L37">        logger.info(&quot;WebSocket Opened&quot;);</span>
+        try {
+<span class="nc" id="L39">            String message = getMessage();</span>
+<span class="nc" id="L40">            webSocket.send(message);</span>
+<span class="nc" id="L41">        } catch (IOException e) {</span>
+<span class="nc" id="L42">            logger.error(&quot;Error creating message&quot;, e);</span>
+<span class="nc" id="L43">        }</span>
+<span class="nc" id="L44">    }</span>
+
+    @Override
+    public void onMessage(WebSocket webSocket, ByteString bytes) {
+        try {
+<span class="nc" id="L49">            JsonNode jsonNode = objectMapper.readTree(bytes.utf8());</span>
+
+<span class="nc bnc" id="L51" title="All 2 branches missed.">            if (!jsonNode.has(&quot;type&quot;)) {</span>
+<span class="nc" id="L52">                logger.warn(&quot;Received message without type field&quot;);</span>
+<span class="nc" id="L53">                return;</span>
+            }
+<span class="nc" id="L55">            String type = jsonNode.get(&quot;type&quot;).asText();</span>
+
+            try {
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                if (type.startsWith(&quot;candle&quot;)) {</span>
+<span class="nc" id="L59">                    CoinCandleDTO candle = processCandle(jsonNode);</span>
+<span class="nc" id="L60">                    candleHandler.accept(candle);</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">                } else if (&quot;ticker&quot;.equals(type)) {</span>
+<span class="nc" id="L62">                    CoinPriceDTO price = processTicker(jsonNode);</span>
+<span class="nc" id="L63">                    priceHandler.accept(price);</span>
+<span class="nc" id="L64">                    priceDetailHandler.accept(price);</span>
+
+                    // WebSocket에서 받은 데이터를 CoinPriceService에 전달
+<span class="nc" id="L67">                    coinPriceService.updateCoinPrice(price.getCode(), price.getPrice());</span>
+                }
+<span class="nc" id="L69">            } catch (NullPointerException e) {</span>
+<span class="nc" id="L70">                logger.error(&quot;Missing required fields in message: {}&quot;, jsonNode.toString(), e);</span>
+<span class="nc" id="L71">            }</span>
+<span class="nc" id="L72">        } catch (IOException e) {</span>
+<span class="nc" id="L73">            logger.error(&quot;Error processing message: {}&quot;, bytes.utf8(), e);</span>
+<span class="nc" id="L74">        }</span>
+<span class="nc" id="L75">    }</span>
+
+    private CoinCandleDTO processCandle(JsonNode jsonNode) {
+<span class="nc" id="L78">        return new CoinCandleDTO(</span>
+<span class="nc" id="L79">                jsonNode.get(&quot;code&quot;).asText(),</span>
+<span class="nc" id="L80">                jsonNode.get(&quot;opening_price&quot;).asDouble(),</span>
+<span class="nc" id="L81">                jsonNode.get(&quot;high_price&quot;).asDouble(),</span>
+<span class="nc" id="L82">                jsonNode.get(&quot;low_price&quot;).asDouble(),</span>
+<span class="nc" id="L83">                jsonNode.get(&quot;trade_price&quot;).asDouble(),</span>
+<span class="nc" id="L84">                jsonNode.get(&quot;candle_acc_trade_price&quot;).asDouble(),</span>
+<span class="nc" id="L85">                jsonNode.get(&quot;timestamp&quot;).asLong()</span>
+        );
+    }
+
+    private CoinPriceDTO processTicker(JsonNode jsonNode) {
+<span class="nc" id="L90">        return new CoinPriceDTO(</span>
+<span class="nc" id="L91">                jsonNode.get(&quot;code&quot;).asText(),</span>
+<span class="nc" id="L92">                jsonNode.get(&quot;trade_price&quot;).asDouble(),</span>
+<span class="nc" id="L93">                jsonNode.get(&quot;signed_change_rate&quot;).asDouble(),</span>
+<span class="nc" id="L94">                jsonNode.get(&quot;acc_trade_price_24h&quot;).asDouble()</span>
+        );
+    }
+
+    @Override
+    public void onClosed(WebSocket webSocket, int code, String reason) {
+<span class="nc" id="L100">        logger.info(&quot;WebSocket Closed: {} / {}&quot;, code, reason);</span>
+<span class="nc" id="L101">    }</span>
+
+    @Override
+    public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+<span class="nc" id="L105">        logger.error(&quot;WebSocket Error&quot;, t);</span>
+<span class="nc" id="L106">    }</span>
+
+    private String getMessage() throws IOException {
+<span class="nc" id="L109">        List&lt;Map&lt;String, Object&gt;&gt; message = new ArrayList&lt;&gt;();</span>
+
+        // Ticket
+<span class="nc" id="L112">        message.add(Collections.singletonMap(&quot;ticket&quot;, UUID.randomUUID().toString()));</span>
+
+        // Ticker
+<span class="nc" id="L115">        Map&lt;String, Object&gt; ticker = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L116">        ticker.put(&quot;type&quot;, &quot;ticker&quot;);</span>
+<span class="nc" id="L117">        ticker.put(&quot;codes&quot;, Arrays.asList(UpbitWebSocketClient.COIN_CODES));</span>
+<span class="nc" id="L118">        message.add(ticker);</span>
+
+        // Candle
+<span class="nc" id="L121">        Map&lt;String, Object&gt; candle = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L122">        candle.put(&quot;type&quot;, &quot;candle.1s&quot;);</span>
+<span class="nc" id="L123">        candle.put(&quot;codes&quot;, Arrays.asList(UpbitWebSocketClient.COIN_CODES));</span>
+<span class="nc" id="L124">        message.add(candle);</span>
+
+        // Format
+<span class="nc" id="L127">        message.add(Collections.singletonMap(&quot;format&quot;, &quot;DEFAULT&quot;));</span>
+
+<span class="nc" id="L129">        return objectMapper.writeValueAsString(message);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

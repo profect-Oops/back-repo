@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AlertRestController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">oops</a> &gt; <a href="index.source.html" class="el_package">org.oops.api.alert.controller</a> &gt; <span class="el_source">AlertRestController.java</span></div><h1>AlertRestController.java</h1><pre class="source lang-java linenums">package org.oops.api.alert.controller;
+
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.oops.api.alert.dto.CreateAlertDTO;
+import org.oops.api.alert.dto.GetAlertResponseDTO;
+import org.oops.api.alert.service.AlertService;
+import org.oops.api.coin.dto.CoinFindByNameDTO;
+import org.oops.api.coin.service.CoinService;
+import org.oops.api.common.controller.BaseController;
+import org.oops.api.common.dto.ResponseDTO;
+import org.oops.global.config.auth.dto.SessionUser;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
+<span class="nc" id="L21">@Slf4j</span>
+<span class="nc" id="L22">@RequiredArgsConstructor</span>
+@RequestMapping(value = &quot;/api/alert&quot;)
+@RestController
+public class AlertRestController extends BaseController {
+
+    private final AlertService alertService;
+    private final CoinService coinService;
+
+    //알림 생성
+    @PostMapping(&quot;/save&quot;)
+    public ResponseEntity&lt;ResponseDTO&lt;CreateAlertDTO.CreateAlertResponseDTO&gt;&gt; saveAlert(
+            @RequestBody CreateAlertDTO.CreateAlertRequestDTO requestDTO, HttpSession httpSession) {
+
+        // 세션에서 유저 정보 가져오기
+<span class="nc" id="L36">        SessionUser user = (SessionUser) httpSession.getAttribute(&quot;user&quot;);</span>
+
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (user == null) {</span>
+            // 세션에 유저가 없으면 에러 응답
+<span class="nc" id="L40">            return ResponseEntity.status(401).body(ResponseDTO.error(&quot;유저 정보가 없습니다.&quot;));</span>
+        }
+
+        // 유저의 이메일 가져오기
+<span class="nc" id="L44">        String email = user.getEmail();</span>
+
+        // 코인 이름으로 코인 조회
+<span class="nc" id="L47">        CoinFindByNameDTO coin = coinService.findCoinIdByCoinName(requestDTO.getCoinName());</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (coin == null) {</span>
+            // 코인을 찾을 수 없으면 에러 응답
+<span class="nc" id="L50">            return ResponseEntity.status(404).body(ResponseDTO.error(&quot;해당 코인을 찾을 수 없습니다.&quot;));</span>
+        }
+
+        // 알림 저장 시 email도 함께 전달
+<span class="nc" id="L54">        CreateAlertDTO.CreateAlertResponseDTO response = alertService.saveAlert(email, requestDTO);</span>
+
+<span class="nc" id="L56">        log.info(&quot;컨트롤러 확인:&quot; + response.getAlertActive()+response.getAlertId()+response.getAlertPrice()+response.getUserId()+response.getCoinId());</span>
+
+        // 성공 응답 반환
+<span class="nc" id="L59">        return ResponseEntity.ok(ResponseDTO.ok(response));</span>
+    }
+
+
+    //내 알림 리스트 조회
+    @GetMapping(value = &quot;/read&quot;)
+    public ResponseDTO&lt;List&lt;GetAlertResponseDTO&gt;&gt; getAlert(HttpSession session){
+<span class="nc" id="L66">        SessionUser principal = (SessionUser) session.getAttribute(&quot;user&quot;);</span>
+<span class="nc" id="L67">        return ResponseDTO.ok(alertService.getAlertByUserId(principal.getId()));</span>
+    }
+
+    //내 알림 개수 조회
+    @GetMapping(value = &quot;count&quot;)
+    public Map&lt;String, Integer&gt; countAlert(HttpSession session){
+<span class="nc" id="L73">        SessionUser user = (SessionUser) session.getAttribute(&quot;user&quot;);</span>
+<span class="nc" id="L74">        int totalAlerts = alertService.getTotalAlertCount(user.getId());</span>
+<span class="nc" id="L75">        int activeAlerts = alertService.getActiveAlertCount(user.getId());</span>
+<span class="nc" id="L76">        int inactiveAlerts = totalAlerts - activeAlerts;</span>
+
+<span class="nc" id="L78">        return Map.of(</span>
+<span class="nc" id="L79">                &quot;total&quot;, totalAlerts,</span>
+<span class="nc" id="L80">                &quot;on&quot;, activeAlerts,</span>
+<span class="nc" id="L81">                &quot;off&quot;, inactiveAlerts</span>
+        );
+    }
+
+    // 알림 활성화 여부 수정 -&gt; 부분 업데이트: PATCH
+    @PatchMapping(&quot;/update/{alertId}&quot;)
+    public ResponseEntity&lt;ResponseDTO&lt;Void&gt;&gt; updateAlertStatus(
+            @PathVariable Long alertId,
+            @RequestBody Map&lt;String, Boolean&gt; requestBody) {
+
+<span class="nc" id="L91">        Boolean alertActive = requestBody.get(&quot;alertActive&quot;);</span>
+
+        // 알림 상태 업데이트 서비스 호출
+<span class="nc" id="L94">        alertService.updateAlertStatus(alertId, alertActive);</span>
+
+<span class="nc" id="L96">        return ResponseEntity.ok(ResponseDTO.ok(null));</span>
+    }
+
+    // 알림 조건 수정 -&gt; 부분 업데이트: PATCH
+    @PatchMapping(&quot;/update/alertCondition/{alertId}&quot;)
+    public ResponseEntity&lt;ResponseDTO&lt;Void&gt;&gt; updateAlertCondition(
+            @PathVariable Long alertId,
+            @RequestBody Map&lt;String, String&gt; requestBody) {
+
+<span class="nc" id="L105">        String alertCondition = requestBody.get(&quot;alertCondition&quot;);</span>
+
+        // 알림 상태 업데이트 서비스 호출
+<span class="nc" id="L108">        alertService.updateAlertCondition(alertId, alertCondition);</span>
+
+<span class="nc" id="L110">        return ResponseEntity.ok(ResponseDTO.ok(null));</span>
+    }
+
+    // 알림 가격 수정 -&gt; 부분 업데이트: PATCH
+    @PatchMapping(&quot;/update/price/{alertId}&quot;)
+    public ResponseEntity&lt;ResponseDTO&lt;Void&gt;&gt; updateAlertPrice(
+            @PathVariable Long alertId,
+            @RequestBody Map&lt;String, BigDecimal&gt; requestBody) {
+
+<span class="nc" id="L119">        BigDecimal alertPrice = requestBody.get(&quot;alertPrice&quot;);</span>
+
+        // 알림 상태 업데이트 서비스 호출
+<span class="nc" id="L122">        alertService.updateAlertPrice(alertId, alertPrice);</span>
+
+<span class="nc" id="L124">        return ResponseEntity.ok(ResponseDTO.ok(null));</span>
+    }
+
+
+    //알림 삭제
+    @DeleteMapping(value = &quot;/delete/{alertId}&quot;)
+    public ResponseDTO&lt;Void&gt; deleteAlert(@PathVariable(value = &quot;alertId&quot;) Long alertId){
+<span class="nc" id="L131">        alertService.deleteAlertById(alertId);</span>
+<span class="nc" id="L132">        return ResponseDTO.ok();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

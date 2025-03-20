@@ -26,7 +26,7 @@ public class PriceUpdatePublisher {
             String message = objectMapper.writeValueAsString(priceDTO);
             redisStringTemplate.convertAndSend(priceUpdateTopic.getTopic(), message);
         } catch (Exception e) {
-            logger.error("❌ Redis Pub/Sub 메시지 전송 실패", e);
+            logger.error("Redis Pub/Sub 메시지 전송 실패", e);
         }
     }
 }
