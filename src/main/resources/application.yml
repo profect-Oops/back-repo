@@ -19,7 +19,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
   data:
     redis:
@@ -29,6 +29,14 @@ spring:
       port: 6379
 ---
 server:
+  forward-headers-strategy: framework
+  tomcat:
+    remoteip:
+      protocol-header: "X-Forwarded-Proto"   # 프록시가 보낸 프로토콜 헤더
+      remote-ip-header: "X-Forwarded-For"    # 프록시가 보낸 클라이언트 IP 헤더
+      internal-proxies: "192\\.168\\.\\d{1,3}\\.\\d{1,3}|10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|127\\.0\\.0\\.1"  # 예: 사설망 IP 신뢰
+    redirect-context-root: false            # 프록시 환경 리디렉트 문제 방지
+    use-relative-redirects: true           # Location 헤더를 상대경로로 (HTTPS 유지)
   port: 8080
   cors:
     allowed-origins:
