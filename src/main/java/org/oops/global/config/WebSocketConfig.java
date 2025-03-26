@@ -18,6 +18,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // 웹소켓 부하 테스트 용 순수 WebSocket 연결 지원
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*");
+
+        // SockJS fallback 지원
         registry.addEndpoint("/ws") // WebSocket 엔드포인트
                 .setAllowedOriginPatterns("*") // 모든 도메인에서 접근 가능
                 .withSockJS(); // SockJS를 지원 (WebSocket을 지원하지 않는 브라우저 대응)
