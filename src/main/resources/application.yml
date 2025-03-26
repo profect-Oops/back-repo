@@ -30,6 +30,10 @@ spring:
 ---
 server:
   forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        domain: .todaycoinfo.com
   tomcat:
     remoteip:
       protocol-header: "X-Forwarded-Proto"   # 프록시가 보낸 프로토콜 헤더

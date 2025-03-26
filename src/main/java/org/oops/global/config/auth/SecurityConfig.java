@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/coin/**", "/api/news/**","/api/redis/**", "/ws/**","/cache").permitAll()
                         .requestMatchers("/login","/login/oauth2/**", "/oauth2/**","/api/user/**","/api/auth/check").permitAll()
                         .requestMatchers("/","/index.html", "/static/index.html", "/coin/coinDetail.html","/static/coin/coinDetail.html").permitAll()
-                        .requestMatchers("/api/alert/**","/alert/alarm.html","/static/alert/alarm.html").permitAll()
+                        .requestMatchers("/api/alert/**","/alert/alarm.html","/static/alert/alarm.html").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
