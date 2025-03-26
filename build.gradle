@@ -128,6 +128,9 @@ dependencies {
     // Mockito
     testImplementation 'org.mockito:mockito-core:4.4.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.0'
+
+    // 도메인 분리 상태에서도 세션 쿠키가 전달되게
+    implementation 'org.springframework.session:spring-session-core'
 }
 
 tasks.named('test') {
