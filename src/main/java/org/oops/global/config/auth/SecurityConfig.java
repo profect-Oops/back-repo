@@ -141,7 +141,7 @@ public class SecurityConfig {
                 "https://api.todaycoinfo.com",
                 "http://localhost:8080"
         ));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization")); // 클라이언트에서 사용 가능하도록 추가
