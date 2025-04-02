@@ -5,6 +5,7 @@
 
 <img width="368" alt="스크린샷 2025-02-26 오후 8 44 53" src="https://github.com/user-attachments/assets/bf5335e5-647a-4067-8064-184c6f020e77" />
 
+---
 
 ### 📌 Architecture 구성
 
@@ -22,6 +23,8 @@
 - 데이터베이스 운영
 - SQL 기반 데이터 저장, 수정, 조회 수행
 - Redis 캐시 및 메시지 브로커 활용
+
+---
 
 ### 🌐 전체 흐름
 
