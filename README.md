@@ -103,7 +103,9 @@ JaCoCo를 활용해 코드 커버리지를 측정하고, JUnit 5와 Mockito를 �
 
 ## 보안
 1. ORM 기반 SQL 인젝션 방어
+
 2. OAuth2.0 + Spring Security를 통한 인증 구현
+
 3. 쿠키 보안 설정 - XSS 방어, https 연결에서만 전송
 
 
